@@ -17,6 +17,8 @@
         "build": {
           "builder": "@angular/build:application",
           "options": {
+            "outputPath": "dist/www",
+            "baseHref": "/www/",
             "browser": "src/main.ts",
             "polyfills": [
               "zone.js"
