@@ -1,21 +1,70 @@
-<mat-toolbar color="primary" class="shadow-md">
-  <span>kusnier.net</span>
-</mat-toolbar>
+<div class="page">
+  <mat-card class="intro-card">
+    <h1>👋 Willkommen auf <strong>kusnier.net</strong></h1>
 
-<div class="welcome-container">
-  <mat-card class="welcome-card">
-    <mat-card-header>
-      <mat-card-title>Willkommen auf kusnier.net 👋</mat-card-title>
-    </mat-card-header>
+    <p class="tagline">
+      <mat-icon>code</mat-icon> Softwareentwickler •
+      <mat-icon>fitness_center</mat-icon> Kraftsportler •
+      <mat-icon>self_improvement</mat-icon> Fokus auf Wachstum
+    </p>
 
-    <mat-card-content>
-      <p class="quote">
-        "Verbessere dich jeden Tag – egal wie klein der Schritt ist."
+    <mat-divider></mat-divider>
+
+    <div class="content">
+      <h2>💡 Wer ich bin</h2>
+      <p>
+        Ich bin <strong>Sebastian Kusnier</strong> – Softwareentwickler aus Deutschland 🇩🇪.
+        Seit vielen Jahren lebe ich den Code – mit Leidenschaft für saubere Architekturen,
+        testgetriebene Entwicklung und stetige Verbesserung.
       </p>
-      <p class="subtext">
-        🚀 Temporäre Startseite – bald mehr!
+
+      <p>
+        Ich entwickle in <strong>Java (Spring Boot, Mockito, AssertJ, Maven)</strong>,
+        im Frontend mit <strong>Angular</strong> und <strong>Jest</strong>.
+        In meiner Welt steht Qualität über Geschwindigkeit –
+        aber am liebsten erreiche ich beides gleichzeitig ⚡
       </p>
-    </mat-card-content>
+
+      <mat-divider></mat-divider>
+
+      <h2>🏋️‍♂️ Was mich antreibt</h2>
+      <p>
+        Neben dem Code findest du mich beim Krafttraining oder auf dem Spinning-Bike 🚴‍♂️.
+        Ich glaube daran, dass körperliche Stärke und geistige Klarheit direkt miteinander verbunden sind.
+        Disziplin, Fokus und Wiederholung – Prinzipien, die im Sport wie im Code gleich wichtig sind.
+      </p>
+
+      <p>
+        Mein Motto: <em>„Jeden Tag ein bisschen besser als gestern.“</em>
+        Ob im Training, in neuen Technologien oder in Reflex-Übungen in Valorant 🎯 –
+        ich strebe stets nach Präzision, Stabilität und Flow.
+      </p>
+
+      <mat-divider></mat-divider>
+
+      <h2>🚀 Aktuell</h2>
+      <p>
+        Diese Seite ist noch im Aufbau.
+        In Kürze folgen hier mehr über meine Projekte, technische Artikel und Tools,
+        die mir im Entwickleralltag helfen.
+      </p>
+
+      <p>
+        Bis dahin: Viel Spaß beim Erkunden – oder folge mir einfach auf meinem Weg der ständigen Verbesserung. 💪
+      </p>
+
+      <mat-divider></mat-divider>
+
+      <h2>📬 Kontakt</h2>
+      <p>
+        Fragen, Ideen oder einfach Lust auf einen Tech-Talk?
+        <a href="mailto:sebastian&#64;kusnier.net">sebastian&#64;kusnier.net</a>
+      </p>
+
+      <div class="actions">
+        <button mat-raised-button color="primary" (click)="scrollTop()">Nach oben</button>
+        <button mat-stroked-button color="accent" disabled>Mehr bald...</button>
+      </div>
+    </div>
   </mat-card>
 </div>
-
