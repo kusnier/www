@@ -7,7 +7,6 @@
   padding: 2rem;
   overflow-y: auto;
 
-  // kleine Bildschirme
   @media (max-width: 600px) {
     padding: 1rem;
   }
@@ -68,15 +67,14 @@ a:hover {
 .tagline {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem; // Abstand zwischen Einheiten
-  margin-bottom: 0px;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
 
-  // jede Icon-Text-Einheit zusammenhalten
   span {
     display: inline-flex;
     align-items: center;
     gap: 0.25rem;
-    white-space: nowrap; // verhindert Trennung von Icon und Text
+    white-space: nowrap; // Icon + Text bleiben zusammen
   }
 
   @media (max-width: 600px) {
@@ -84,13 +82,12 @@ a:hover {
   }
 }
 
-
 .actions {
   margin-top: 2rem;
   display: flex;
   gap: 1rem;
   justify-content: center;
-  flex-wrap: wrap; // Buttons umbrechen auf kleinen Screens
+  flex-wrap: wrap;
 }
 
 mat-divider {
