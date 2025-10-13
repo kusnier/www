@@ -93,3 +93,26 @@ a:hover {
 mat-divider {
   margin: 1.5rem 0;
 }
+
+.tool-section {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.tool-card {
+  max-width: 400px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  }
+
+  mat-icon {
+    margin-right: 8px;
+  }
+}

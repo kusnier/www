@@ -1,0 +1,49 @@
+<mat-card class="iban-card">
+  <div class="iban-header">
+    <img src="https://upload.wikimedia.org/wikipedia/en/b/ba/Flag_of_Germany.svg" alt="DE" />
+    <h1>IBAN Generator & Validator</h1>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <section>
+    <h2>IBAN generieren</h2>
+    <button mat-raised-button color="primary" (click)="generateIban()">Neue IBAN erzeugen</button>
+
+    <div *ngIf="generatedIban" class="iban-output">
+      <mat-form-field appearance="outline" class="iban-field">
+        <mat-label>Mit Leerzeichen</mat-label>
+        <input matInput [value]="generatedIbanSpaced" readonly />
+        <button mat-icon-button matSuffix (click)="copy(generatedIbanSpaced)">
+          <mat-icon>content_copy</mat-icon>
+        </button>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="iban-field">
+        <mat-label>Ohne Leerzeichen</mat-label>
+        <input matInput [value]="generatedIban" readonly />
+        <button mat-icon-button matSuffix (click)="copy(generatedIban)">
+          <mat-icon>content_copy</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
+  </section>
+
+  <mat-divider></mat-divider>
+
+  <section>
+    <h2>IBAN validieren</h2>
+    <mat-form-field appearance="outline" class="iban-field">
+      <mat-label>IBAN eingeben</mat-label>
+      <input
+        matInput
+        [(ngModel)]="ibanInput"
+        (ngModelChange)="validateIbanLive()"
+        placeholder="DE89 3704 0044 0532 0130 00"
+      />
+    </mat-form-field>
+
+    <div *ngIf="validationResult === 'valid'" class="valid">✅ IBAN ist gültig</div>
+    <div *ngIf="validationResult === 'invalid'" class="invalid">❌ IBAN ist ungültig</div>
+  </section>
+</mat-card>

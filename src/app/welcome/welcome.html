@@ -59,6 +59,25 @@
         <a href="mailto:sebastian&#64;kusnier.net">sebastian&#64;kusnier.net</a>
       </p>
 
+      <mat-divider></mat-divider>
+
+      <h2>🧰 Meine Tools</h2>
+      <p>
+        Hier findest du kleine, aber nützliche Helfer, die ich für meinen Alltag als Entwickler gebaut habe:
+      </p>
+
+      <div class="tool-section">
+        <mat-card class="tool-card" routerLink="/iban" style="cursor: pointer;" tabindex="0">
+          <mat-card-header>
+            <mat-icon color="primary">credit_card</mat-icon>
+            <mat-card-title>IBAN Generator & Validator</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <p>Erzeuge und prüfe deutsche IBANs – mit nur einem Klick.</p>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
       <div class="actions">
         <button mat-raised-button color="primary" (click)="scrollTop()">Nach oben</button>
         <button mat-stroked-button color="accent" disabled>Mehr bald...</button>
