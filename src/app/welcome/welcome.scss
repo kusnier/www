@@ -103,9 +103,15 @@ mat-divider {
 }
 
 .tool-card {
+  min-width: 400px;
   max-width: 400px;
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  @media (max-width: 600px) {
+    min-width: unset;
+    width: 100%;
+  }
 
   &:hover {
     transform: translateY(-3px);
