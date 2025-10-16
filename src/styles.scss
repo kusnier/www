@@ -37,3 +37,44 @@ body {
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+h1 {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+
+  @media (max-width: 600px) {
+    font-size: 1.5rem;
+  }
+}
+
+h2 {
+  margin-top: 1.5rem;
+  font-weight: 500;
+
+  @media (max-width: 600px) {
+    font-size: 1.2rem;
+  }
+}
+
+p {
+  line-height: 1.6;
+  font-size: 1.05rem;
+  margin: 0.5rem 0 1rem;
+
+  @media (max-width: 600px) {
+    font-size: 0.95rem;
+  }
+}
+
+a {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+mat-divider {
+  margin: 1.5rem 0;
+}

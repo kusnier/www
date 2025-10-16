@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, signal, computed, effect } from '@angular/core';
+import { MatDividerModule } from "@angular/material/divider";
 
 
 interface JwtDecoded {
@@ -16,7 +17,8 @@ interface JwtDecoded {
   styleUrls: ['./jwt-decoder.scss'],
   imports: [
     CommonModule,
-  ]
+    MatDividerModule
+]
 })
 export class JwtDecoder {
 

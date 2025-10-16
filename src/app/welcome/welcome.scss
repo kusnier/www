@@ -1,97 +1,9 @@
-.page {
-  background-color: rgb(233, 233, 233);
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  padding: 2rem;
-  overflow-y: auto;
-
-  @media (max-width: 600px) {
-    padding: 1rem;
-  }
-}
-
-.intro-card {
-  width: 100%;
-  max-width: 800px;
-  border-radius: 20px;
-  padding: 2rem 2.5rem;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-  margin-bottom: 3rem;
-  box-sizing: border-box;
-
-  @media (max-width: 600px) {
-    padding: 1.5rem 1.5rem;
-    border-radius: 15px;
-  }
-}
-
-h1 {
-  font-size: 2rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-
-  @media (max-width: 600px) {
-    font-size: 1.5rem;
-  }
-}
-
-h2 {
-  margin-top: 1.5rem;
-  font-weight: 500;
-
-  @media (max-width: 600px) {
-    font-size: 1.2rem;
-  }
-}
-
-p {
-  line-height: 1.6;
-  font-size: 1.05rem;
-  margin: 0.5rem 0 1rem;
-
-  @media (max-width: 600px) {
-    font-size: 0.95rem;
-  }
-}
-
-a {
-  text-decoration: none;
-}
-
-a:hover {
-  text-decoration: underline;
-}
-
-.tagline {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  margin-bottom: 1rem;
-
-  span {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.25rem;
-    white-space: nowrap; // Icon + Text bleiben zusammen
-  }
-
-  @media (max-width: 600px) {
-    font-size: 1rem;
-  }
-}
-
 .actions {
   margin-top: 2rem;
   display: flex;
   gap: 1rem;
   justify-content: center;
   flex-wrap: wrap;
-}
-
-mat-divider {
-  margin: 1.5rem 0;
 }
 
 .tool-section {

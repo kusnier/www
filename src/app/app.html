@@ -1,1 +1,19 @@
-<router-outlet />
+<div class="page">
+  <mat-card class="intro-card">
+    @if (isRoot()) {
+      <div class="intro">
+        <h1>👋 Willkommen auf <strong>kusnier.net</strong></h1>
+
+        <p class="tagline">
+          <span><mat-icon>code</mat-icon> Softwareentwickler</span>
+          <span><mat-icon>fitness_center</mat-icon> Kraftsportler</span>
+          <span><mat-icon>self_improvement</mat-icon> Fokus auf Wachstum</span>
+        </p>
+      </div>
+    }
+
+    <div class="content">
+      <router-outlet />
+  </div>
+  </mat-card>
+</div>

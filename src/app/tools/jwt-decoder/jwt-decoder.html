@@ -1,59 +1,59 @@
-<div class="container">
-  <h2 class="title">JWT Decoder</h2>
-
-  <textarea
-    placeholder="Füge hier dein JWT ein..."
-    [value]="jwtInput()"
-    (input)="jwtInput.set($any($event.target).value)"
-    rows="5"
-    class="input-area"
-  ></textarea>
-
-  @if (decoded()) {
-    <div class="result">
-
-      @if (decoded()?.error) {
-        <div class="error">{{ decoded()?.error }}</div>
-      }
-
-      @if (!decoded()?.error) {
-        <div class="status" [class.invalid]="!decoded()?.valid">
-          <strong>Status:</strong>
-          {{ decoded()?.valid ? '✅ Gültig' : '❌ Abgelaufen' }}
-        </div>
-
-        @if (expirationDate()) {
-          <div>
-            <strong>Ablaufzeit:</strong> {{ expirationDate() }}
-          </div>
-        }
-
-        <div class="section">
-          <div class="header">
-            <h3>Header</h3>
-            <button (click)="copy(formatJson(decoded()?.header))">Copy</button>
-          </div>
-          <pre>{{ formatJson(decoded()?.header) }}</pre>
-        </div>
-
-        <div class="section">
-          <div class="header">
-            <h3>Payload</h3>
-            <button (click)="copy(formatJson(decoded()?.payload))">Copy</button>
-          </div>
-          <pre>{{ formatJson(decoded()?.payload) }}</pre>
-        </div>
-
-        <div class="section">
-          <div class="header">
-            <h3>Signature</h3>
-            <button (click)="copy(decoded()?.signature!)">Copy</button>
-          </div>
-          <pre>{{ decoded()?.signature }}</pre>
-        </div>
-      }
-    </div>
-  }
-
-
+<div class="header">
+  <h1>JWT Decoder</h1>
 </div>
+
+<mat-divider></mat-divider>
+
+<textarea
+  placeholder="Füge hier dein JWT ein..."
+  [value]="jwtInput()"
+  (input)="jwtInput.set($any($event.target).value)"
+  rows="5"
+  class="input-area"
+></textarea>
+
+@if (decoded()) {
+  <div class="result">
+
+    @if (decoded()?.error) {
+      <div class="error">{{ decoded()?.error }}</div>
+    }
+
+    @if (!decoded()?.error) {
+      <div class="status" [class.invalid]="!decoded()?.valid">
+        <strong>Status:</strong>
+        {{ decoded()?.valid ? '✅ Gültig' : '❌ Abgelaufen' }}
+      </div>
+
+      @if (expirationDate()) {
+        <div>
+          <strong>Ablaufzeit:</strong> {{ expirationDate() }}
+        </div>
+      }
+
+      <div class="section">
+        <div class="header">
+          <h3>Header</h3>
+          <button (click)="copy(formatJson(decoded()?.header))">Copy</button>
+        </div>
+        <pre>{{ formatJson(decoded()?.header) }}</pre>
+      </div>
+
+      <div class="section">
+        <div class="header">
+          <h3>Payload</h3>
+          <button (click)="copy(formatJson(decoded()?.payload))">Copy</button>
+        </div>
+        <pre>{{ formatJson(decoded()?.payload) }}</pre>
+      </div>
+
+      <div class="section">
+        <div class="header">
+          <h3>Signature</h3>
+          <button (click)="copy(decoded()?.signature!)">Copy</button>
+        </div>
+        <pre>{{ decoded()?.signature }}</pre>
+      </div>
+    }
+  </div>
+}
