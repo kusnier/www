@@ -1,10 +1,11 @@
-<div class="header">
-  <h1>JWT Decoder</h1>
+<div class="content-header">
+  <h1><span class="icon">🔐</span>JWT Decoder</h1>
 </div>
 
 <mat-divider></mat-divider>
 
 <textarea
+  mat-textarea
   placeholder="Füge hier dein JWT ein..."
   [value]="jwtInput()"
   (input)="jwtInput.set($any($event.target).value)"

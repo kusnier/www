@@ -38,6 +38,10 @@ body {
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
 h1 {
   font-size: 2rem;
   font-weight: 600;
@@ -77,4 +81,31 @@ a:hover {
 
 mat-divider {
   margin: 1.5rem 0;
+}
+
+.content-header {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+
+  .icon {
+    margin-right: 8px;
+  }
+
+  h1 {
+    font-size: 1.6rem;
+    margin: 0;
+    line-height: 1.2;
+    word-break: keep-all;
+  }
+}
+
+@media (max-width: 480px) {
+  .content-header h1 {
+    font-size: 1.3rem;
+  }
+
+  .content-header img {
+    width: 30px;
+  }
 }
