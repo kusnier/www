@@ -1,5 +1,5 @@
 <div class="content-header">
-  <h1><span class="icon">🔐</span>JWT Decoder</h1>
+  <h1>🔐 JWT Decoder</h1>
 </div>
 
 <mat-divider></mat-divider>
@@ -15,7 +15,6 @@
 
 @if (decoded()) {
   <div class="result">
-
     @if (decoded()?.error) {
       <div class="error">{{ decoded()?.error }}</div>
     }
@@ -27,31 +26,41 @@
       </div>
 
       @if (expirationDate()) {
-        <div>
+        <div class="expiration">
           <strong>Ablaufzeit:</strong> {{ expirationDate() }}
+          <br>
+          <small>(läuft ab in {{ timeRemaining() }})</small>
         </div>
       }
+
+      <mat-divider></mat-divider>
 
       <div class="section">
         <div class="header">
           <h3>Header</h3>
-          <button (click)="copy(formatJson(decoded()?.header))">Copy</button>
+          <button (click)="copy(formatJson(decoded()?.header), 'header')">
+            {{ copied() === 'header' ? '✅ Kopiert' : '📋 Copy' }}
+          </button>
         </div>
-        <pre>{{ formatJson(decoded()?.header) }}</pre>
+        <pre [innerHTML]="highlightJson(decoded()?.header)"></pre>
       </div>
 
       <div class="section">
         <div class="header">
           <h3>Payload</h3>
-          <button (click)="copy(formatJson(decoded()?.payload))">Copy</button>
+          <button (click)="copy(formatJson(decoded()?.payload), 'payload')">
+            {{ copied() === 'payload' ? '✅ Kopiert' : '📋 Copy' }}
+          </button>
         </div>
-        <pre>{{ formatJson(decoded()?.payload) }}</pre>
+        <pre [innerHTML]="highlightJson(decoded()?.payload)"></pre>
       </div>
 
       <div class="section">
         <div class="header">
           <h3>Signature</h3>
-          <button (click)="copy(decoded()?.signature!)">Copy</button>
+          <button (click)="copy(decoded()?.signature!, 'signature')">
+            {{ copied() === 'signature' ? '✅ Kopiert' : '📋 Copy' }}
+          </button>
         </div>
         <pre>{{ decoded()?.signature }}</pre>
       </div>

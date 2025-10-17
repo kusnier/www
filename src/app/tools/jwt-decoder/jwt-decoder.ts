@@ -1,7 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, signal, computed, effect } from '@angular/core';
 import { MatDividerModule } from "@angular/material/divider";
+import hljs from 'highlight.js/lib/core';
+import json from 'highlight.js/lib/languages/json';
+import 'highlight.js/styles/github-dark.css';
 
+hljs.registerLanguage('json', json);
 
 interface JwtDecoded {
   header?: Record<string, any>;
@@ -18,16 +22,16 @@ interface JwtDecoded {
   imports: [
     CommonModule,
     MatDividerModule
-]
+  ]
 })
 export class JwtDecoder {
 
   jwtInput = signal('');
   decoded = signal<JwtDecoded | null>(null);
+  copied = signal<string | null>(null); // zeigt an, welcher Bereich kopiert wurde
 
   constructor() {
     effect(() => {
-      // Live decode when input changes
       const value = this.jwtInput();
       this.decodeJwt(value);
     });
@@ -41,8 +45,8 @@ export class JwtDecoder {
 
     try {
       const [header, payload, signature] = token.split('.');
-      const headerObj = JSON.parse(atob(header));
-      const payloadObj = JSON.parse(atob(payload));
+      const headerObj = JSON.parse(atob(this.padBase64(header)));
+      const payloadObj = JSON.parse(atob(this.padBase64(payload)));
 
       const now = Math.floor(Date.now() / 1000);
       const exp = payloadObj.exp;
@@ -54,19 +58,44 @@ export class JwtDecoder {
         signature,
         valid
       });
-    } catch (error) {
-      this.decoded.set({
-        error: 'Ungültiges JWT-Format'
-      });
+    } catch {
+      this.decoded.set({ error: 'Ungültiges JWT-Format' });
     }
   }
 
+  /** Pretty JSON als string (für Copy) */
   formatJson(data: any): string {
-    return JSON.stringify(data, null, 2);
+    if (!data) return '';
+    try {
+      return JSON.stringify(data, null, 2);
+    } catch {
+      return String(data);
+    }
   }
 
-  copy(text: string) {
+  /** Highlighted HTML (für Anzeige) */
+  highlightJson(data: any): string {
+    if (!data) return '';
+    const jsonStr = this.formatJson(data);
+    return hljs.highlight(jsonStr, { language: 'json' }).value;
+  }
+
+  /** Copy + kleines visuelles Feedback */
+  copy(text: string, label: string) {
+    if (!text) return;
     navigator.clipboard.writeText(text);
+    this.copied.set(label);
+    setTimeout(() => this.copied.set(null), 2000);
+  }
+
+  /** falls Base64 ohne padding reinkommt, auffüllen */
+  private padBase64(input: string): string {
+    // Base64 kann ohne '=' padding kommen; atob braucht padding
+    const mod = input.length % 4;
+    if (mod === 2) return input + '==';
+    if (mod === 3) return input + '=';
+    if (mod === 1) return input + '==='; // ungewöhnlich, aber safe
+    return input;
   }
 
   expirationDate = computed(() => {
@@ -74,5 +103,15 @@ export class JwtDecoder {
     if (!payload?.['exp']) return null;
     const date = new Date(payload['exp'] * 1000);
     return date.toLocaleString();
+  });
+
+  timeRemaining = computed(() => {
+    const payload = this.decoded()?.payload;
+    if (!payload?.['exp']) return null;
+    const diffSec = payload['exp'] - Math.floor(Date.now() / 1000);
+    if (diffSec <= 0) return 'abgelaufen';
+    const mins = Math.floor(diffSec / 60);
+    const secs = diffSec % 60;
+    return `${mins} min ${secs}s`;
   });
 }

@@ -1,20 +1,9 @@
-.container {
-  max-width: 800px;
-  margin: 2rem auto;
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.title {
-  font-size: 1.5rem;
-  font-weight: 600;
+.content-header {
   text-align: center;
+  margin-bottom: 1rem;
 }
 
 .input-area {
-  margin-top: 1rem;
   width: 100%;
   font-family: monospace;
   border: 1px solid #ccc;
@@ -29,6 +18,7 @@
   border-radius: 12px;
   padding: 1rem;
   box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  margin-top: 1rem;
 }
 
 .error {
@@ -40,14 +30,11 @@
 .status {
   font-weight: 600;
   color: #0a0;
-}
-
-.status.invalid {
-  color: #b00020;
+  &.invalid { color: #b00020; }
 }
 
 .expiration {
-  margin: 0.5rem 0 1rem 0;
+  margin: 0.5rem 0 1rem;
 }
 
 .section {
@@ -68,17 +55,19 @@ button {
   padding: 0.25rem 0.75rem;
   cursor: pointer;
   transition: background 0.2s;
-}
+  font-size: 0.85rem;
 
-button:hover {
-  background: #0056b3;
+  &:hover {
+    background: #0056b3;
+  }
 }
 
 pre {
-  background: #f0f0f0;
-  padding: 0.5rem;
-  border-radius: 6px;
+  background: #2d2d2d;
+  color: #f8f8f2;
+  padding: 0.75rem;
+  border-radius: 8px;
   overflow-x: auto;
-  white-space: pre-wrap;
-  word-wrap: break-word;
+  font-family: monospace;
+  font-size: 0.9rem;
 }
