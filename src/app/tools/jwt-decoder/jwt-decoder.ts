@@ -1,6 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, signal, computed, effect } from '@angular/core';
 import { MatDividerModule } from "@angular/material/divider";
+import { MatCardModule } from "@angular/material/card";
+import { MatButtonModule } from "@angular/material/button";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatInputModule } from "@angular/material/input";
+import { MatIconModule } from "@angular/material/icon";
 import hljs from 'highlight.js/lib/core';
 import json from 'highlight.js/lib/languages/json';
 import 'highlight.js/styles/github-dark.css';
@@ -21,20 +26,22 @@ interface JwtDecoded {
   styleUrls: ['./jwt-decoder.scss'],
   imports: [
     CommonModule,
-    MatDividerModule
+    MatDividerModule,
+    MatCardModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatIconModule
   ]
 })
 export class JwtDecoder {
 
   jwtInput = signal('');
   decoded = signal<JwtDecoded | null>(null);
-  copied = signal<string | null>(null); // zeigt an, welcher Bereich kopiert wurde
+  copied = signal<string | null>(null);
 
   constructor() {
-    effect(() => {
-      const value = this.jwtInput();
-      this.decodeJwt(value);
-    });
+    effect(() => this.decodeJwt(this.jwtInput()));
   }
 
   private decodeJwt(token: string) {
@@ -63,7 +70,6 @@ export class JwtDecoder {
     }
   }
 
-  /** Pretty JSON als string (für Copy) */
   formatJson(data: any): string {
     if (!data) return '';
     try {
@@ -73,14 +79,12 @@ export class JwtDecoder {
     }
   }
 
-  /** Highlighted HTML (für Anzeige) */
   highlightJson(data: any): string {
     if (!data) return '';
     const jsonStr = this.formatJson(data);
     return hljs.highlight(jsonStr, { language: 'json' }).value;
   }
 
-  /** Copy + kleines visuelles Feedback */
   copy(text: string, label: string) {
     if (!text) return;
     navigator.clipboard.writeText(text);
@@ -88,13 +92,11 @@ export class JwtDecoder {
     setTimeout(() => this.copied.set(null), 2000);
   }
 
-  /** falls Base64 ohne padding reinkommt, auffüllen */
   private padBase64(input: string): string {
-    // Base64 kann ohne '=' padding kommen; atob braucht padding
     const mod = input.length % 4;
     if (mod === 2) return input + '==';
     if (mod === 3) return input + '=';
-    if (mod === 1) return input + '==='; // ungewöhnlich, aber safe
+    if (mod === 1) return input + '===';
     return input;
   }
 

@@ -4,19 +4,24 @@
 
 <mat-divider></mat-divider>
 
-<textarea
-  mat-textarea
-  placeholder="Füge hier dein JWT ein..."
-  [value]="jwtInput()"
-  (input)="jwtInput.set($any($event.target).value)"
-  rows="5"
-  class="input-area"
-></textarea>
+<mat-form-field appearance="outline" class="full-width input-area">
+  <mat-label>Füge dein JWT ein</mat-label>
+  <textarea
+    matInput
+    rows="5"
+    placeholder="Header.Payload.Signature"
+    [value]="jwtInput()"
+    (input)="jwtInput.set($any($event.target).value)">
+  </textarea>
+</mat-form-field>
 
 @if (decoded()) {
   <div class="result">
     @if (decoded()?.error) {
-      <div class="error">{{ decoded()?.error }}</div>
+      <mat-card class="error-card">
+        <mat-icon color="warn">error</mat-icon>
+        {{ decoded()?.error }}
+      </mat-card>
     }
 
     @if (!decoded()?.error) {
@@ -26,44 +31,42 @@
       </div>
 
       @if (expirationDate()) {
-        <div class="expiration">
+        <div>
           <strong>Ablaufzeit:</strong> {{ expirationDate() }}
           <br>
-          <small>(läuft ab in {{ timeRemaining() }})</small>
+          <small>({{ timeRemaining() }})</small>
         </div>
       }
 
-      <mat-divider></mat-divider>
-
-      <div class="section">
+      <mat-card class="section">
         <div class="header">
           <h3>Header</h3>
-          <button (click)="copy(formatJson(decoded()?.header), 'header')">
-            {{ copied() === 'header' ? '✅ Kopiert' : '📋 Copy' }}
+          <button mat-stroked-button (click)="copy(formatJson(decoded()?.header), 'header')">
+            {{ copied() === 'header' ? '✅' : '📋 Copy' }}
           </button>
         </div>
         <pre [innerHTML]="highlightJson(decoded()?.header)"></pre>
-      </div>
+      </mat-card>
 
-      <div class="section">
+      <mat-card class="section">
         <div class="header">
           <h3>Payload</h3>
-          <button (click)="copy(formatJson(decoded()?.payload), 'payload')">
-            {{ copied() === 'payload' ? '✅ Kopiert' : '📋 Copy' }}
+          <button mat-stroked-button (click)="copy(formatJson(decoded()?.payload), 'payload')">
+            {{ copied() === 'payload' ? '✅' : '📋 Copy' }}
           </button>
         </div>
         <pre [innerHTML]="highlightJson(decoded()?.payload)"></pre>
-      </div>
+      </mat-card>
 
-      <div class="section">
+      <mat-card class="section">
         <div class="header">
           <h3>Signature</h3>
-          <button (click)="copy(decoded()?.signature!, 'signature')">
-            {{ copied() === 'signature' ? '✅ Kopiert' : '📋 Copy' }}
+          <button mat-stroked-button (click)="copy(decoded()?.signature!, 'signature')">
+            {{ copied() === 'signature' ? '✅' : '📋 Copy' }}
           </button>
         </div>
         <pre>{{ decoded()?.signature }}</pre>
-      </div>
+      </mat-card>
     }
   </div>
 }
