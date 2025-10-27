@@ -11,5 +11,9 @@ export const routes: Routes = [
     path: 'jwt-decoder',
     loadComponent: () => import('./tools/jwt-decoder/jwt-decoder').then(m => m.JwtDecoder)
   },
+  {
+    path: 'impressum',
+    loadComponent: () => import('./impressum/impressum').then(m => m.Impressum)
+  },
   { path: '**', redirectTo: '' },
 ];

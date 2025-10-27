@@ -1,5 +1,5 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
+import { NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -7,9 +7,14 @@ import { filter, map, startWith } from 'rxjs';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, MatCardModule, MatIconModule],
+  imports: [
+    RouterOutlet,
+    MatCardModule,
+    MatIconModule,
+    RouterLink
+  ],
   templateUrl: './app.html',
-  styleUrl: './app.scss'
+  styleUrl: './app.scss',
 })
 export class App {
   protected readonly title = signal('www');
@@ -19,7 +24,7 @@ export class App {
   readonly isRoot = toSignal(
     this.router.events.pipe(
       filter((e): e is NavigationEnd => e instanceof NavigationEnd),
-      map(e => e.urlAfterRedirects === '/'),
+      map((e) => e.urlAfterRedirects === '/'),
       startWith(this.router.url === '/')
     )
   );
