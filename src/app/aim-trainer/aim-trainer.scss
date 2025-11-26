@@ -1,0 +1,38 @@
+.trainer {
+}
+.wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.play-area {
+  position: relative;
+  width: 600px;
+  height: 600px;
+}
+
+.status {
+  text-align: center;
+  margin: 30px 0;
+  font-size: large;
+  font-weight: bold;
+}
+.overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 24px;
+  color: #333;
+}
+
+.action-button {
+  margin: 1em;
+  text-align: center;
+}
+.action-button button {
+  margin-bottom: 10px;
+  width: 200px;
+}

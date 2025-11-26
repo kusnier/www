@@ -61,3 +61,13 @@
     text-decoration: underline;
   }
 }
+.loading-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.15);
+  z-index: 10000; /* über allem */
+  backdrop-filter: blur(3px);
+}

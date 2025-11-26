@@ -1,0 +1,32 @@
+<div class="settings">
+
+  {{ shape() }}
+  {{ mode() }}
+  <div class="settings-row">
+    <span class="label">Abstand</span>
+    <!-- MatSlider mit Thumb-Input; reagiert während des Ziehens via (input) -->
+    <mat-slider min="50" max="300" (input)="updateDistance($event)">
+      <input matSliderThumb [value]="distance()">
+    </mat-slider>
+
+    <span class="label">Zielgröße</span>
+    <!-- Sofortige Reaktion -->
+    <mat-slider min="10" max="100" (input)="updateSize($event)">
+      <input matSliderThumb [value]="size()">
+    </mat-slider>
+  </div>
+
+  <div class="settings-row">
+    <span class="label">Form</span>
+    <mat-radio-group [value]="shape()" (change)="shape.set($event.value)">
+      <mat-radio-button value="circle">Kreis</mat-radio-button>
+      <mat-radio-button value="square">Quadrat</mat-radio-button>
+    </mat-radio-group>
+
+    <span class="label">Modus</span>
+    <mat-radio-group [value]="mode()" (change)="mode.set($event.value)">
+      <mat-radio-button value="horizontal">Horizontal</mat-radio-button>
+      <mat-radio-button value="vertical">Vertical</mat-radio-button>
+    </mat-radio-group>
+  </div>
+</div>

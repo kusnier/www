@@ -1,23 +1,33 @@
-<div class="page">
-  <mat-card class="intro-card">
-    @if (isRoot()) {
-      <div class="intro">
-        <h1>👋 Willkommen auf <strong>kusnier.net</strong></h1>
-
-        <p class="tagline">
-          <span><mat-icon>code</mat-icon> Softwareentwickler</span>
-          <span><mat-icon>fitness_center</mat-icon> Kraftsportler</span>
-          <span><mat-icon>self_improvement</mat-icon> Fokus auf Wachstum</span>
-        </p>
-      </div>
-    }
-
-    <div class="content">
-      <router-outlet />
+@if (isLoading()) {
+  <div class="loading-overlay" aria-busy="true" aria-live="polite">
+    <mat-progress-spinner
+      mode="indeterminate"
+      diameter="120"
+      strokeWidth="8">
+    </mat-progress-spinner>
   </div>
-  </mat-card>
+} @else {
+  <div class="page">
+    <mat-card class="intro-card">
+      @if (isRoot()) {
+        <div class="intro">
+          <h1>👋 Willkommen auf <strong>kusnier.net</strong></h1>
 
-  <footer class="footer">
-    <a routerLink="/impressum">Impressum</a>
-  </footer>
-</div>
+          <p class="tagline">
+            <span><mat-icon>code</mat-icon> Softwareentwickler</span>
+            <span><mat-icon>fitness_center</mat-icon> Kraftsportler</span>
+            <span><mat-icon>self_improvement</mat-icon> Fokus auf Wachstum</span>
+          </p>
+        </div>
+      }
+
+      <div class="content">
+        <router-outlet />
+    </div>
+    </mat-card>
+
+    <footer class="footer">
+      <a routerLink="/impressum">Impressum</a>
+    </footer>
+  </div>
+}

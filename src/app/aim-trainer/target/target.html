@@ -1,0 +1,15 @@
+<div class='target fade-in' [class.circle]="shape() === 'circle'" [class.square]="shape() === 'square'"
+  [style.left.px]="x()" [style.top.px]="y()" [style.width.px]="size()" [style.height.px]="size()" (click)="onClick()">
+
+
+  @if(showTtk()) {
+    <div class="text">
+        @if (ttk() < 1000) {
+          {{ ttk() | number:'1.2-2' }}
+        } @else {
+          > 1s
+        }
+    </div>
+  }
+</div>
+

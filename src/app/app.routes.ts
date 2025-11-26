@@ -15,5 +15,9 @@ export const routes: Routes = [
     path: 'impressum',
     loadComponent: () => import('./impressum/impressum').then(m => m.Impressum)
   },
+  {
+    path: 'aim-trainer',
+    loadComponent: () => import('./aim-trainer/aim-trainer').then(m => m.AimTrainer)
+  },
   { path: '**', redirectTo: '' },
 ];

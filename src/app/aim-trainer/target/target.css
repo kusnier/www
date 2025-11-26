@@ -1,0 +1,26 @@
+.target {
+  position: absolute;
+  background: red;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.3s ease-in;
+}
+.fade-in {
+  opacity: 1;
+}
+.circle {
+  border-radius: 50%;
+}
+.square {
+  border-radius: 0;
+}
+.text {
+  font-size: small;
+  color: white;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+  pointer-events: none;
+}

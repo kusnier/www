@@ -1,0 +1,51 @@
+<div class="content-header">
+  <h1>🎯 Aim Trainer</h1>
+</div>
+
+<mat-divider></mat-divider>
+
+<div class='trainer'>
+  <app-settings
+    [(distance)]="distance"
+    [(size)]="size"
+    [(shape)]="shape"
+    [(mode)]="mode">
+  </app-settings>
+
+  <div class='action-button'>
+    <button mat-raised-button color='warn' (click)="startGame()">Start</button>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <div class="wrapper">
+
+    <div class='status'>
+      <span>Score: {{ score() }}</span>
+      <span> - </span>
+      <span>Time: {{ timeLeft() }}s</span>
+    </div>
+
+    <div class='play-area'>
+      @if (gameActive() && currentTarget()) {
+        <app-target
+          [ttk]="ttk()"
+          [x]="currentTarget().x"
+          [y]="currentTarget().y"
+          [shape]="shape()"
+          [size]="size()"
+          (hit)="hitTarget()">
+        </app-target>
+      }
+      @if (!gameActive()) {
+        <div class='overlay'>Game Over</div>
+      }
+    </div>
+
+    <div class='status'>
+      <span>Avg/Hit: {{ avgTimePerHit() | number:'1.2-2' }}s</span>
+      <span> - </span>
+      <span>TTK: {{ ttk() | number:'1.2-2' }}ms</span>
+    </div>
+  </div>
+</div>
