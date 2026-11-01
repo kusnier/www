@@ -1,73 +1,34 @@
-.page {
-  background-color: rgb(233, 233, 233);
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  padding: 2rem;
-  overflow-y: auto;
-  flex-direction: column;
-  align-items: center;
-
-  @media (max-width: 600px) {
-    padding: 1rem;
-  }
+:host { display: block; }
+.site-header { position: relative; z-index: 2; max-width: 1440px; margin: auto; padding: 0 64px; }
+.header-inner { min-height: 104px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--line); gap: 24px; }
+.brand { display: inline-flex; align-items: center; gap: 22px; color: var(--ink); text-decoration: none; white-space: nowrap; }
+.monogram { font: bold 39px/1 Georgia, serif; letter-spacing: -3px; }
+.monogram span { color: var(--mint); }
+.brand-name { font: 23px/1 Georgia, serif; }
+nav { display: flex; gap: 36px; font-size: 14px; }
+nav a { color: var(--muted); text-decoration: none; }
+nav a:hover { color: var(--mint); }
+nav a span { margin-left: 5px; color: var(--mint); }
+.site-footer { min-height: 112px; max-width: 1312px; margin: auto; display: flex; align-items: center; justify-content: space-between; gap: 30px; border-top: 1px solid var(--line); padding: 26px 0; }
+.footer-links { display: flex; gap: 40px; align-items: center; font-size: 13px; }
+.footer-links a { color: var(--muted); text-decoration: none; }
+.footer-links a:hover { color: var(--mint); }
+.footer-links span { margin-right: 8px; }
+.inner-page { max-width: 880px; min-height: calc(100svh - 217px); margin: auto; padding: 44px 32px 80px; overflow-wrap: anywhere; }
+.back-link { display: inline-block; margin-bottom: 36px; font-size: 14px; color: var(--mint); }
+.skip-link { position: fixed; left: 20px; top: -100px; z-index: 20; background: var(--mint); color: var(--bg); padding: 12px 20px; }
+.skip-link:focus { top: 12px; }
+@media (max-width: 1440px) { .site-footer { margin-inline: 64px; } }
+@media (max-width: 700px) {
+  .site-header { padding-inline: 24px; }
+  .header-inner { min-height: 88px; gap: 16px; }
+  .brand { gap: 12px; }
+  .brand-name { font-size: 18px; }
+  .monogram { font-size: 33px; }
+  nav { gap: 18px; font-size: 12px; }
+  nav a span { display: none; }
+  .site-footer { margin-inline: 24px; align-items: flex-start; flex-direction: column; gap: 24px; }
+  .footer-links { flex-wrap: wrap; gap: 20px; }
+  .inner-page { padding: 28px 24px 60px; }
 }
-
-.intro-card {
-  width: 100%;
-  max-width: 800px;
-  border-radius: 20px;
-  padding: 2rem 2.5rem;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-  margin-bottom: 1rem;
-
-  @media (max-width: 600px) {
-    padding: 1.5rem 1.5rem;
-    border-radius: 15px;
-  }
-}
-
-.tagline {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  margin-bottom: 1rem;
-
-  span {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.25rem;
-    white-space: nowrap; // Icon + Text bleiben zusammen
-  }
-
-  @media (max-width: 600px) {
-    font-size: 1rem;
-  }
-}
-
-.footer {
-  text-align: center;
-  font-size: 0.9rem;
-  color: #555;
-  width: 100%;
-
-  a {
-    color: inherit;
-    text-decoration: none;
-  }
-
-  a:hover {
-    text-decoration: underline;
-  }
-}
-.loading-overlay {
-  position: fixed;
-  inset: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: rgba(0, 0, 0, 0.15);
-  z-index: 10000; /* über allem */
-  backdrop-filter: blur(3px);
-}
+@media (max-width: 390px) { .brand-name { display: none; } nav { gap: 22px; } }

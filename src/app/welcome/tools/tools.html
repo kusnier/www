@@ -1,0 +1,37 @@
+<section id="tools" class="tools-section" aria-labelledby="tools-title">
+  <div class="section-intro">
+    <p class="eyebrow">Tools</p>
+    <h2 id="tools-title">Kleine Tools. Echter Nutzen.</h2>
+    <p>Praktische Werkzeuge für den Entwickleralltag – direkt im Browser, ohne Aufwand.</p>
+  </div>
+  <div class="tool-grid">
+    <a class="tool-card" routerLink="/iban" aria-label="IBAN Generator und Validator öffnen">
+      <div class="tool-card-heading">
+        <span class="tool-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none"><rect x="4" y="6" width="24" height="21" rx="3"/><path d="M4 12h24"/></svg></span>
+        <div><h3>IBAN Generator &amp; Validator</h3><p>Deutsche IBANs erzeugen und prüfen.</p></div>
+        <span class="tool-link">Tool öffnen <span aria-hidden="true">↗</span></span>
+      </div>
+      <div class="mini-app" aria-hidden="true">
+        <div class="mini-tabs"><span class="selected">Generator</span><span>Validator</span></div>
+        <div class="mini-body">
+          <div class="mini-fields"><div><span class="mini-label">Bankleitzahl</span><span class="mini-input">37040044</span></div><div><span class="mini-label">Kontonummer</span><span class="mini-input">0532013000</span></div></div>
+          <span class="mini-button">IBAN generieren</span>
+          <span class="mini-label result-label">Ergebnis</span>
+          <div class="mini-input iban-result">DE89 3704 0044 0532 0130 00 <span>⧉</span></div>
+          <span class="mini-success"><span>✓</span> Gültige deutsche IBAN</span>
+        </div>
+      </div>
+    </a>
+    <a class="tool-card" routerLink="/jwt-decoder" aria-label="JWT Decoder öffnen">
+      <div class="tool-card-heading">
+        <span class="tool-icon braces" aria-hidden="true">{{ '{}' }}</span>
+        <div><h3>JWT Decoder</h3><p>Tokens dekodieren und Inhalte verstehen.</p></div>
+        <span class="tool-link">Tool öffnen <span aria-hidden="true">↗</span></span>
+      </div>
+      <div class="mini-app jwt-preview" aria-hidden="true">
+        <div class="jwt-input"><span class="mini-label">JWT Token</span><div class="mini-input token">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.<span>eyJzdWIiOiJkZW1vIiwibmFtZSI6IlNlYmFzdGlhbiJ9.</span>c2lnbmF0dXJl</div><span class="mini-button">Token dekodieren</span></div>
+        <div class="jwt-output"><div class="mini-tabs"><span class="selected">Header</span><span>Payload</span><span>Signatur</span></div><pre>{{ jwtHeader }}</pre></div>
+      </div>
+    </a>
+  </div>
+</section>

@@ -1,0 +1,41 @@
+:host { display: block; }
+.eyebrow { color: var(--mint); font-size: 10px; font-weight: 500; letter-spacing: 4px; line-height: 1.8; text-transform: uppercase; margin: 0 0 28px; }
+h2, h3 { color: var(--ink); font-family: Georgia,'Times New Roman',serif; font-weight: 400; }
+.tools-section { max-width: 1440px; margin: auto; padding: 64px 64px 66px; scroll-margin-top: 28px; }
+.section-intro .eyebrow { margin-bottom: 14px; }
+h2 { font-size: clamp(34px,3.7vw,52px); line-height: 1.17; letter-spacing: -1.5px; margin: 0 0 14px; }
+.section-intro>p:last-child { color: var(--muted); font-size: 17px; margin: 0 0 38px; }
+.tool-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.tool-card { display: block; min-width: 0; padding: 26px; border: 1px solid #45535e; border-radius: 8px; color: var(--ink); text-decoration: none; background: linear-gradient(145deg,#121d2450,#0c151b30); transition: border-color .2s,background .2s; }
+.tool-card:hover { border-color: var(--mint); background: #16232b; }
+.tool-card-heading { display: flex; align-items: center; gap: 17px; margin-bottom: 26px; }
+.tool-icon { width: 54px; height: 62px; flex: 0 0 54px; border: 1px solid #63747b; border-radius: 9px; display: flex; align-items: center; justify-content: center; color: var(--mint); }
+.tool-icon svg { width: 35px; stroke: var(--mint); stroke-width: 2; }
+.braces { font: 29px monospace; }
+h3 { font-size: clamp(18px,1.65vw,24px); line-height: 1.25; margin: 0 0 8px; letter-spacing: -.4px; }
+.tool-card-heading p { font-size: 12px; line-height: 1.5; color: var(--muted); margin: 0; }
+.tool-link { color: var(--mint); font-size: 11px; margin-left: auto; white-space: nowrap; border-bottom: 1px solid #a2d4b560; padding-bottom: 6px; }
+.mini-app { border: 1px solid #34434f; border-radius: 6px; overflow: hidden; background: #0b141b70; }
+.mini-tabs { display: flex; gap: 24px; padding: 0 15px; border-bottom: 1px solid #34434f; height: 40px; align-items: center; color: #a1acb7; font-size: 10px; }
+.mini-tabs span { display: inline-flex; height: 100%; align-items: center; white-space: nowrap; }
+.mini-tabs .selected { color: #c2e4d0; border-bottom: 2px solid var(--mint); }
+.mini-body { padding: 16px; }
+.mini-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.mini-label { display: block; font-size: 10px; color: #b1bbc4; margin-bottom: 7px; }
+.mini-input { display: block; border: 1px solid #3b4a57; border-radius: 4px; padding: 9px 10px; font: 12px/1.4 'Courier New',monospace; color: #dce0e3; background: linear-gradient(110deg,#14212b,#0c151b); }
+.mini-button { display: flex; justify-content: center; align-items: center; background: linear-gradient(105deg,#a6dabb,#a1d3b3); color: #10251b; border-radius: 3px; min-height: 36px; font-size: 11px; margin-top: 12px; }
+.result-label { margin-top: 20px; }
+.iban-result { display: flex; justify-content: space-between; align-items: center; letter-spacing: .7px; }
+.iban-result>span { font-size: 17px; }
+.mini-success { display: flex; align-items: center; gap: 7px; color: #b9dec7; font-size: 10px; margin-top: 10px; }
+.mini-success>span { color: #123322; background: var(--mint); border-radius: 50%; padding: 1px 4px; }
+.jwt-preview { display: grid; grid-template-columns: 1.1fr 1fr; min-height: 276px; }
+.jwt-input { padding: 16px; border-right: 1px solid #34434f; min-width: 0; }
+.token { overflow-wrap: anywhere; font-size: 10px; line-height: 1.8; min-height: 163px; }
+.token span { color: #b7c5d8; }
+.jwt-output { min-width: 0; }
+.jwt-output .mini-tabs { padding-inline: 12px; gap: 15px; }
+.jwt-output pre { padding: 20px 14px; color: #a8cee2; font: 11px/1.9 monospace; }
+@media (max-width: 1100px) {.tools-section { padding-inline: 40px; }.tool-card { padding: 20px; }.tool-card-heading { flex-wrap: wrap; gap: 12px; }.tool-link { margin-left: 66px; margin-top: -5px; } }
+@media (max-width: 800px) {.tool-grid { grid-template-columns: 1fr; }.tools-section { padding: 48px 32px; }.tool-card-heading { flex-wrap: nowrap; }.tool-link { margin: 0 0 0 auto; } }
+@media (max-width: 480px) {.eyebrow { font-size: 8px; letter-spacing: 2.7px; margin-bottom: 22px; }.tools-section { padding: 42px 24px; }h2 { font-size: 34px; }.section-intro>p:last-child { font-size: 15px; line-height: 1.7; }.tool-card { padding: 18px; }.tool-icon { width: 42px; flex-basis: 42px; height: 49px; }.tool-card-heading { gap: 12px; flex-wrap: wrap; }.tool-card-heading h3 { font-size: 18px; }.tool-card-heading p { font-size: 11px; }.tool-link { margin-left: 54px; }.mini-body { padding: 12px; }.mini-input { font-size: 10px; }.mini-tabs { gap: 20px; }.jwt-preview { grid-template-columns: 1fr 1fr; }.jwt-input { padding: 12px; }.token { font-size: 9px; }.jwt-output .mini-tabs { gap: 10px; padding-inline: 8px; font-size: 9px; }.jwt-output pre { font-size: 10px; padding: 18px 10px; } }

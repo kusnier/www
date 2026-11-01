@@ -1,43 +1,22 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
-import { MatCardModule } from "@angular/material/card";
-import { MatIconModule } from "@angular/material/icon";
 import { toSignal } from '@angular/core/rxjs-interop';
-import { distinctUntilChanged, filter, map, startWith } from 'rxjs';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { distinctUntilChanged, filter, map } from 'rxjs';
 
 @Component({
   selector: 'app-root',
-  imports: [
-    RouterOutlet,
-    MatCardModule,
-    MatIconModule,
-    MatProgressSpinnerModule,
-    RouterLink
-  ],
+  imports: [RouterOutlet, RouterLink],
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })
 export class App {
-  protected readonly title = signal('www');
-  private router = inject(Router);
-
-  // Reaktives Signal, das automatisch bei jeder Navigation aktualisiert wird
+  private readonly router = inject(Router);
   readonly isRoot = toSignal(
     this.router.events.pipe(
-      filter((e): e is NavigationEnd => e instanceof NavigationEnd),
-      map((e) => e.urlAfterRedirects === '/'),
-      distinctUntilChanged()
+      filter((event): event is NavigationEnd => event instanceof NavigationEnd),
+      map((event) => event.urlAfterRedirects.split(/[?#]/)[0] === '/'),
+      distinctUntilChanged(),
     ),
-    { initialValue: false } // wichtig: kein automatischer Root-Check!
+    { initialValue: this.router.url.split(/[?#]/)[0] === '/' },
   );
-  readonly isLoading = toSignal(
-    this.router.events.pipe(
-      filter((e): e is NavigationEnd => e instanceof NavigationEnd),
-      map(() => false),
-      startWith(true),
-      distinctUntilChanged()
-    )
-  );
-
 }

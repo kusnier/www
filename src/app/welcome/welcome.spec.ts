@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { Welcome } from './welcome';
+import { provideRouter } from '@angular/router';
 
 describe('Welcome', () => {
   let component: Welcome;
@@ -8,7 +9,8 @@ describe('Welcome', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Welcome]
+      imports: [Welcome],
+      providers: [provideRouter([])],
     })
     .compileComponents();
 
@@ -19,5 +21,15 @@ describe('Welcome', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('shows the approved stack and links the previews to the real tools', () => {
+    const page = fixture.nativeElement as HTMLElement;
+    expect(page.querySelector('h1')?.textContent).toContain('Sauberer Code.');
+    expect(page.querySelector('.tech-stack')?.textContent).toContain('Vitest');
+    expect(page.querySelector('.tech-stack')?.textContent).not.toContain('Jest');
+    expect(page.querySelector('.tool-card[href="/iban"]')).not.toBeNull();
+    expect(page.querySelector('.tool-card[href="/jwt-decoder"]')).not.toBeNull();
+    expect(page.querySelector('#ueber-mich')).not.toBeNull();
   });
 });

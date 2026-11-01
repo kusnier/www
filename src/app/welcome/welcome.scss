@@ -1,43 +1,14 @@
-.actions {
-  margin-top: 2rem;
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-.tool-section {
-  margin-top: 2rem;
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-
-.tool-card {
-  min-width: 400px;
-  max-width: 400px;
-  cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-
-  @media (max-width: 600px) {
-    min-width: unset;
-    width: 100%;
-  }
-
-  &:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-  }
-
-  mat-icon {
-    margin-right: 8px;
-  }
-
-  .icon {
-    font-size: 1.5em;
-    line-height: 1em;
-    border: none !important;
-    margin-right: 0.5em;
-  }
-}
+:host { display: block; }
+.eyebrow { color: var(--mint); font-size: 10px; font-weight: 500; letter-spacing: 4px; line-height: 1.8; text-transform: uppercase; margin: 0 0 28px; }
+h2 { color: var(--ink); font-family: Georgia,'Times New Roman',serif; font-weight: 400; }
+h2 { font-size: clamp(34px,3.7vw,52px); line-height: 1.17; letter-spacing: -1.5px; margin: 0 0 14px; }
+.about-section { max-width: 1440px; margin: auto; min-height: 335px; position: relative; overflow: hidden; border-top: 1px solid var(--line); scroll-margin-top: 28px; }
+.cycling-image { position: absolute; width: 65%; height: 100%; object-fit: cover; object-position: center 56%; right: 0; top: 0; }
+.about-shade { position: absolute; inset: 0; background: linear-gradient(90deg,var(--bg) 25%,#0d161ded 40%,#0d161d20 75%); }
+.about-copy { position: relative; padding: 52px 64px 60px; }
+.about-copy .eyebrow { margin-bottom: 17px; }
+.about-copy h2 { font-size: 43px; max-width: 660px; }
+.about-copy>p:last-child { font-size: 16px; color: var(--muted); margin: 24px 0 0; }
+@media (max-width: 1100px) {.about-copy { padding-inline: 40px; } }
+@media (max-width: 800px) {.about-copy { padding-inline: 32px; }.about-copy h2 { font-size: 37px; }.about-shade { background: linear-gradient(90deg,var(--bg),#0d161dbb 60%,#0d161d55); }.cycling-image { width: 100%; } }
+@media (max-width: 480px) {.eyebrow { font-size: 8px; letter-spacing: 2.7px; margin-bottom: 22px; }h2 { font-size: 34px; }.about-copy { padding: 46px 24px; }.about-copy h2 { font-size: 34px; }.about-copy>p:last-child { font-size: 14px; max-width: 260px; line-height: 1.8; }.about-section { min-height: 330px; } }

@@ -1,5 +1,7 @@
 # Www
 
+Personal portfolio at [kusnier.net](https://kusnier.net). See [redesign notes](docs/redesign.md) for the visual design, image assets, validation, deployment and rollback instructions.
+
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.1.0.
 
 ## Development server
