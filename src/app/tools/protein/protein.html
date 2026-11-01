@@ -64,7 +64,7 @@
       @if (r.leanMass !== null) { <p class="context">Geschätzte fettfreie Masse: <strong>{{ r.leanMass | number:'1.1-1' }} kg</strong></p> }
       <div class="meal-plan">
         <label for="meals">Auf Mahlzeiten verteilen</label>
-        <select id="meals" [ngModel]="input().meals" (ngModelChange)="update('meals', $event)"><option [ngValue]="3">3 Mahlzeiten</option><option [ngValue]="4">4 Mahlzeiten</option><option [ngValue]="5">5 Mahlzeiten</option></select>
+        <select id="meals" [ngModel]="input().meals" (ngModelChange)="update('meals', $event)"><option [ngValue]="1">1 Mahlzeit</option><option [ngValue]="2">2 Mahlzeiten</option><option [ngValue]="3">3 Mahlzeiten</option><option [ngValue]="4">4 Mahlzeiten</option><option [ngValue]="5">5 Mahlzeiten</option></select>
         <p><strong>≈ {{ r.perMeal }} g</strong> pro Mahlzeit</p>
         <span class="subtle">Gleichmäßige Aufteilung als Alltagshilfe, kein starrer Essensplan.</span>
       </div>

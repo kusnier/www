@@ -26,7 +26,7 @@ export function calculateProtein(input: ProteinInput) {
   if (!valid(input.age, 19, 100) || !Number.isInteger(input.age)) errors.push('Der Rechner ist für Erwachsene von 19 bis 100 Jahren ausgelegt.');
   if (!valid(input.hours, 0, 40)) errors.push('Bitte einen Trainingsumfang zwischen 0 und 40 Stunden pro Woche eingeben.');
   if (input.bodyFat !== null && !valid(input.bodyFat, 3, 65)) errors.push('Körperfettanteil bitte leer lassen oder zwischen 3 und 65 % angeben.');
-  if (![3, 4, 5].includes(input.meals)) errors.push('Bitte drei, vier oder fünf Mahlzeiten auswählen.');
+  if (![1, 2, 3, 4, 5].includes(input.meals)) errors.push('Bitte eine bis fünf Mahlzeiten auswählen.');
   if (!['maintain', 'muscle', 'fat-loss'].includes(input.goal) || !['strength', 'endurance', 'mixed'].includes(input.sport)) errors.push('Bitte ein Ziel und eine Sportart auswählen.');
   if (errors.length) return { errors, result: null };
 

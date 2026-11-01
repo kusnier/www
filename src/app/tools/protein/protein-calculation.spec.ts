@@ -31,6 +31,8 @@ describe('Protein calculation', () => {
     expect(result({ bodyFat: 20 }).result?.target).toBe(result().result?.target);
   });
   it('distributes the unrounded amount over the selected meals', () => {
+    expect(result({ meals: 1 }).result?.perMeal).toBe(128);
+    expect(result({ meals: 2 }).result?.perMeal).toBe(64);
     expect(result({ meals: 5 }).result?.perMeal).toBe(26);
   });
   it('rejects missing, nonfinite and out-of-range input without a stale result', () => {
