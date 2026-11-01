@@ -5,10 +5,11 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "postbuild": "node scripts/publish-licenses.cjs",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "test:jab": "node scripts/test-jab.cjs",
-    "deploy": "ng build --configuration production && npx angular-cli-ghpages --dir=dist/www/browser  --cname=kusnier.net"
+    "deploy": "npm run build && npx angular-cli-ghpages --dir=dist/www/browser --cname=kusnier.net"
   },
   "prettier": {
     "overrides": [

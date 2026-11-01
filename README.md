@@ -2,6 +2,8 @@
 
 Personal portfolio at [kusnier.net](https://kusnier.net). See [redesign notes](docs/redesign.md) for the visual design, image assets, validation, deployment and rollback instructions.
 
+Third-party licenses, font/image provenance and publication notes: [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). No overarching license has been selected for the owner's original project code or media.
+
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.1.0.
 
 ## Development server
