@@ -4,6 +4,11 @@ import { Welcome } from './welcome/welcome';
 export const routes: Routes = [
   { path: '', component: Welcome },
   {
+    path: 'proteinrechner',
+    title: 'Proteinrechner – Dein täglicher Proteinbedarf | kusnier.net',
+    loadComponent: () => import('./tools/protein/protein').then(m => m.Protein)
+  },
+  {
     path: 'iban',
     loadComponent: () => import('./tools/iban/iban').then(m => m.Iban)
   },

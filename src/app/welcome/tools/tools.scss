@@ -6,6 +6,9 @@ h2, h3 { color: var(--ink); font-family: Georgia,'Times New Roman',serif; font-w
 h2 { font-size: clamp(34px,3.7vw,52px); line-height: 1.17; letter-spacing: -1.5px; margin: 0 0 14px; }
 .section-intro>p:last-child { color: var(--muted); font-size: 17px; margin: 0 0 38px; }
 .tool-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.protein-card { grid-column: 1 / -1; display: grid !important; grid-template-columns: 1fr 1fr; gap: 28px; align-items: center; }
+.protein-card .tool-card-heading { margin-bottom: 0; }
+@media (max-width:800px) { .protein-card { grid-template-columns: 1fr; } }
 .tool-card { display: block; min-width: 0; padding: 26px; border: 1px solid #45535e; border-radius: 8px; color: var(--ink); text-decoration: none; background: linear-gradient(145deg,#121d2450,#0c151b30); transition: border-color .2s,background .2s; }
 .tool-card:hover { border-color: var(--mint); background: #16232b; }
 .tool-card-heading { display: flex; align-items: center; gap: 17px; margin-bottom: 26px; }

@@ -1,0 +1,83 @@
+<header class="intro">
+  <p class="eyebrow">Training &amp; Ernährung</p>
+  <h1>Dein Proteinbedarf.</h1>
+  <p>Passend zu deinem Körper, deinem Training und deinem Ziel. Ein transparenter Richtwert für deinen Alltag.</p>
+</header>
+<div class="calculator">
+  <form class="panel" aria-label="Deine Angaben" (submit)="$event.preventDefault()">
+    <h2>Deine Ausgangslage</h2>
+    <p class="subtle">Starte mit deinen Werten. Das Ergebnis passt sich direkt an.</p>
+    <div class="fields">
+      <label for="weight">Körpergewicht <span>kg</span>
+        <input id="weight" name="weight" type="number" min="35" max="300" step="0.1" required [ngModel]="input().weight" (ngModelChange)="update('weight', $event)">
+      </label>
+      <label for="height">Körpergröße <span>cm</span>
+        <input id="height" name="height" type="number" min="120" max="230" step="1" required [ngModel]="input().height" (ngModelChange)="update('height', $event)">
+      </label>
+      <label for="age">Alter <span>Jahre</span>
+        <input id="age" name="age" type="number" min="19" max="100" step="1" required [ngModel]="input().age" (ngModelChange)="update('age', $event)">
+      </label>
+      <label for="hours">Training pro Woche <span>Stunden</span>
+        <input id="hours" name="hours" type="number" min="0" max="40" step="0.5" required [ngModel]="input().hours" (ngModelChange)="update('hours', $event)">
+      </label>
+    </div>
+    <fieldset><legend>Dein Ziel</legend><div class="choices">
+      @for (goal of goals; track goal.value) {
+        <label class="choice" [class.active]="input().goal === goal.value"><input type="radio" name="goal" [value]="goal.value" [ngModel]="input().goal" (ngModelChange)="update('goal', $event)">{{ goal.label }}</label>
+      }
+    </div></fieldset>
+    <label for="sport">Dein Training
+      <select id="sport" name="sport" [ngModel]="input().sport" (ngModelChange)="update('sport', $event)">
+        @for (sport of sports; track sport.value) { <option [value]="sport.value">{{ sport.label }}</option> }
+      </select>
+    </label>
+    <details><summary>Körperzusammensetzung · optional</summary>
+      <label for="fat">Körperfettanteil <span>%</span>
+        <input id="fat" name="fat" type="number" min="3" max="65" step="0.1" placeholder="Falls bekannt" [ngModel]="input().bodyFat" (ngModelChange)="update('bodyFat', $event)" aria-describedby="fat-help">
+      </label>
+      <p id="fat-help" class="subtle">Zeigt ergänzend die geschätzte fettfreie Masse. Verändert den gewichtsbezogenen Proteinrichtwert nicht. Eine Einteilung in Körpertypen ist nicht nötig.</p>
+      <label class="check"><input name="actual" type="checkbox" [ngModel]="input().useActualWeight" (ngModelChange)="update('useActualWeight', $event)">Auch bei BMI über 25 mit meinem aktuellen Gewicht rechnen</label>
+      <p class="subtle">Zum Beispiel bei hoher Muskelmasse. Der BMI unterscheidet nicht zwischen Fett und Muskeln.</p>
+    </details>
+    <button type="button" class="reset" (click)="reset()">Angaben leeren</button>
+  </form>
+  <section class="panel result" aria-label="Dein Ergebnis">
+    @if (calculation().result; as r) {
+      <p class="eyebrow">Deine tägliche Orientierung</p>
+      <div class="amount" aria-live="polite" aria-atomic="true">{{ r.target }}<span>g Protein</span></div>
+      <p class="result-label">{{ r.sports ? 'Planungswert pro Tag' : 'Referenzwert pro Tag' }}</p>
+      <div class="range">
+        <div class="range-label"><span>{{ r.sports ? 'Sportlicher Orientierungsbereich' : 'DGE-Referenzwert' }}</span><strong>{{ r.low }}{{ r.sports ? '–' + r.high : '' }} g</strong></div>
+        <div class="track" aria-hidden="true"><span [style.left.%]="r.sports ? (r.factor - 1.2) / 0.8 * 100 : 50"></span></div>
+        <div class="range-label subtle"><span>{{ r.lowFactor | number:'1.1-1' }} g/kg</span><span>{{ r.highFactor | number:'1.1-1' }} g/kg</span></div>
+      </div>
+      <p class="formula">{{ r.referenceWeight | number:'1.1-1' }} kg × {{ r.factor | number:'1.1-1' }} g/kg ≈ <strong>{{ r.target }} g</strong></p>
+      @if (r.sports) {
+        <p class="subtle">Der Bereich von 1,2–2,0 g/kg stammt aus der DGE-Sportposition. Den Punkt darin wählen wir als praktische Planungshilfe: 1,8 bei Fettabbau, 1,6 bei Muskelaufbau, sonst 1,4 für Ausdauer und 1,6 für Kraftsport oder gemischtes Training. Diese Auswahl ist keine separate DGE-Empfehlung und kein exakt gemessener Bedarf.</p>
+      } @else {
+        <p class="subtle">Unter fünf Trainingsstunden pro Woche verwenden wir den allgemeinen DGE-Referenzwert: 0,8 g/kg unter 65 Jahren, ab 65 Jahren 1,0 g/kg. Ein Trainingsziel allein erhöht diesen Wert hier nicht.</p>
+      }
+      @if (r.adjusted) {
+        <p class="notice">Bei BMI über 25 beziehen sich die DGE-Werte auf Normalgewicht. Hier verwenden wir transparent ein Referenzgewicht bei BMI 24,9 ({{ r.referenceWeight | number:'1.1-1' }} kg). Bei hoher Muskelmasse kannst du unter „Körperzusammensetzung“ auf dein aktuelles Gewicht umstellen.</p>
+      }
+      @if (r.bmi > 25 && !r.adjusted) { <p class="notice">Du rechnest bewusst mit deinem aktuellen Gewicht statt dem Normalgewichtsbezug der DGE. Das Ergebnis kann dadurch höher ausfallen.</p> }
+      @if (r.leanMass !== null) { <p class="context">Geschätzte fettfreie Masse: <strong>{{ r.leanMass | number:'1.1-1' }} kg</strong></p> }
+      <div class="meal-plan">
+        <label for="meals">Auf Mahlzeiten verteilen</label>
+        <select id="meals" [ngModel]="input().meals" (ngModelChange)="update('meals', $event)"><option [ngValue]="3">3 Mahlzeiten</option><option [ngValue]="4">4 Mahlzeiten</option><option [ngValue]="5">5 Mahlzeiten</option></select>
+        <p><strong>≈ {{ r.perMeal }} g</strong> pro Mahlzeit</p>
+        <span class="subtle">Gleichmäßige Aufteilung als Alltagshilfe, kein starrer Essensplan.</span>
+      </div>
+    } @else {
+      <p class="eyebrow">Dein Ergebnis</p><h2>Noch kurz deine Angaben prüfen.</h2>
+      <ul class="errors" aria-live="polite">@for (error of calculation().errors; track error) { <li>{{ error }}</li> }</ul>
+    }
+  </section>
+</div>
+<aside class="sources" aria-label="Berechnung und Quellen">
+  <h2>Nachvollziehbar statt auf das Gramm genau.</h2>
+  <p>Gewicht, Alter und Trainingsumfang bestimmen hier die Grundlage. Die Körpergröße ordnet das Gewicht ein; sie ist kein zusätzlicher Proteinmultiplikator. Bei mindestens fünf Stunden Training pro Woche nutzen wir den sportlichen Bereich. Körperfettwerte dienen nur als Zusatzinformation.</p>
+  <p>Orientierung für gesunde Erwachsene ab 19 Jahren. Nicht für Schwangerschaft, Stillzeit oder Erkrankungen mit angepasstem Proteinbedarf. In diesen Fällen ist eine individuelle Ernährungsberatung sinnvoll.</p>
+  <p><a href="https://www.dge.de/wissenschaft/referenzwerte/protein/" target="_blank" rel="noopener noreferrer">DGE: Referenzwerte für Protein ↗</a><br><a href="https://www.dge.de/wissenschaft/stellungnahmen-und-positionspapiere/positionen/proteinzufuhr-im-sport/" target="_blank" rel="noopener noreferrer">DGE: Proteinzufuhr im Sport ↗</a></p>
+  <p class="subtle">Deine Eingaben bleiben im Browser. Sie werden nicht gespeichert oder versendet.</p>
+</aside>
