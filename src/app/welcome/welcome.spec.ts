@@ -30,6 +30,8 @@ describe('Welcome', () => {
     expect(page.querySelector('.tech-stack')?.textContent).not.toContain('Jest');
     expect(page.querySelector('.tool-card[href="/iban"]')).not.toBeNull();
     expect(page.querySelector('.tool-card[href="/jwt-decoder"]')).not.toBeNull();
+    expect(page.querySelector('.tool-card[href="/jab-code"]')).not.toBeNull();
+    expect(page.querySelectorAll('.tool-card').length).toBe(4);
     expect(page.querySelector('#ueber-mich')).not.toBeNull();
   });
 });

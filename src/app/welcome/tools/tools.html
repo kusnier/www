@@ -5,7 +5,7 @@
     <p>Praktische Werkzeuge für Code, Alltag und Training – direkt im Browser, ohne Aufwand.</p>
   </div>
   <div class="tool-grid">
-    <a class="tool-card protein-card" routerLink="/proteinrechner" aria-label="Proteinrechner öffnen">
+    <a class="tool-card" routerLink="/proteinrechner" aria-label="Proteinrechner öffnen">
       <div class="tool-card-heading">
         <span class="tool-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none"><path d="M3 12v8m5-12v16m0-8h16m0-8v16m5-12v8"/></svg></span>
         <div><h3>Dein Proteinbedarf</h3><p>Dein Körper. Dein Training. Dein Ziel.</p></div>
@@ -44,6 +44,14 @@
         <div class="jwt-input"><span class="mini-label">JWT Token</span><div class="mini-input token">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.<span>eyJzdWIiOiJkZW1vIiwibmFtZSI6IlNlYmFzdGlhbiJ9.</span>c2lnbmF0dXJl</div><span class="mini-button">Token dekodieren</span></div>
         <div class="jwt-output"><div class="mini-tabs"><span class="selected">Header</span><span>Payload</span><span>Signatur</span></div><pre>{{ jwtHeader }}</pre></div>
       </div>
+    </a>
+    <a class="tool-card" routerLink="/jab-code" aria-label="JAB-Code Generator öffnen">
+      <div class="tool-card-heading">
+        <span class="tool-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none"><path d="M4 13V4h9M19 4h9v9M28 19v9h-9M13 28H4v-9"/><path d="M11 11h4v4h-4zm8 0h3v3h-3zm-8 8h3v3h-3zm8 0h4v4h-4z"/></svg></span>
+        <div><h3>Datei ↔ JAB-Code</h3><p>Text und Dateien als echten Farbcode übertragen.</p></div>
+        <span class="tool-link">Tool öffnen <span aria-hidden="true">↗</span></span>
+      </div>
+      <div class="mini-app jab-card-preview" aria-hidden="true"><div class="mini-tabs"><span class="selected">Erstellen</span><span>Lesen</span></div><div class="mini-body"><img src="/images/jab-example.png" alt="" width="150" height="150" loading="lazy"><span class="mini-label">Datei rein. Farbe raus.</span><span class="mini-success">Lokal · PNG-Export · SHA-256-Prüfung</span><span class="mini-button">JAB-Code entdecken ↗</span></div></div>
     </a>
   </div>
 </section>

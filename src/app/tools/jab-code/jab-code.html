@@ -1,0 +1,68 @@
+<header class="intro">
+  <p class="eyebrow">Daten werden Farbe</p>
+  <h1>Datei ↔ JAB-Code.</h1>
+  <p>Text oder kleine Dateien in einen echten Farbcode verwandeln. Als PNG mitnehmen und die Originaldaten wiederherstellen – direkt in deinem Browser.</p>
+</header>
+<div class="switch" aria-label="Funktion auswählen">
+  <button type="button" [class.active]="tab() === 'create'" [attr.aria-pressed]="tab() === 'create'" [disabled]="!!busy()" (click)="tab.set('create'); error.set('')">Code erstellen</button>
+  <button type="button" [class.active]="tab() === 'read'" [attr.aria-pressed]="tab() === 'read'" [disabled]="!!busy()" (click)="tab.set('read'); error.set('')">Code lesen</button>
+</div>
+@if (tab() === 'create') {
+  <div class="workspace">
+    <section class="panel" aria-label="Daten eingeben">
+      <h2>Was möchtest du übertragen?</h2>
+      <fieldset [disabled]="!!busy()"><legend class="sr-only">Eingabe auswählen</legend>
+        <div class="source-choices">
+          <label><input type="radio" name="source" value="text" [ngModel]="source()" (ngModelChange)="chooseSource($event)">Text</label>
+          <label><input type="radio" name="source" value="file" [ngModel]="source()" (ngModelChange)="chooseSource($event)">Datei · auch binär</label>
+        </div>
+        @if (source() === 'text') {
+          <label for="jab-text">Deine Nachricht</label>
+          <textarea id="jab-text" rows="7" [ngModel]="text()" (ngModelChange)="editText($event)" aria-describedby="text-limit"></textarea>
+          <p id="text-limit" class="subtle" [class.invalid]="textBytes() > maxBytes">{{ textBytes() }} / 2.048 Bytes · UTF-8, inklusive Umlauten und Emojis</p>
+        } @else {
+          <label class="file-label" for="jab-file">Datei auswählen · maximal 2 KiB</label>
+          <input id="jab-file" type="file" (change)="selectFile($event)" aria-describedby="file-info">
+          <p id="file-info" class="subtle">@if (selectedFile(); as file) { {{ file.name }} · {{ file.size }} Bytes } @else { Zum Beispiel ein kleines PDF, Bild, ZIP oder eine Konfigurationsdatei. }</p>
+        }
+        <button class="primary" type="button" (click)="generate()" [disabled]="source() === 'text' ? textBytes() < 1 || textBytes() > maxBytes : !selectedFile() || !selectedFile()!.size || selectedFile()!.size > maxBytes">JAB-Code erzeugen <span aria-hidden="true">↗</span></button>
+      </fieldset>
+      <p class="subtle">Ein Code, acht Farben, automatische Symbolgröße. Dateiname, Dateityp und SHA-256-Prüfsumme werden mit verpackt.</p>
+    </section>
+    <section class="panel preview" aria-label="Code-Vorschau">
+      <p class="eyebrow">Dein JAB-Code</p>
+      @if (codeUrl()) {
+        <img class="code-image" [src]="codeUrl()" alt="Erzeugter JAB-Code mit deinen Daten">
+        <p class="success">✓ Automatisch zurückgelesen · Daten stimmen bytegenau überein</p>
+        <a class="primary" [href]="codeUrl()" [download]="codeName()">PNG herunterladen ↓</a>
+      } @else {
+        <div class="placeholder"><img src="/images/jab-example.png" alt="Beispiel eines echten JAB-Codes" width="174" height="174"><p>{{ busy() || 'Hier erscheint dein Code.' }}</p><span class="subtle">{{ busy() ? 'Die Verarbeitung bleibt auf deinem Gerät.' : 'Das Bild oben ist nur ein Beispiel.' }}</span></div>
+      }
+    </section>
+  </div>
+} @else {
+  <section class="panel" aria-label="Codebild einlesen">
+    <h2>Vom Farbcode zurück zur Datei.</h2>
+    <p>Wähle das erzeugte PNG oder ein scharfes Foto des Codes. Gute Farben und der vollständige Code helfen beim Lesen.</p>
+    <label class="file-label" for="jab-image">Codebild auswählen · PNG, JPEG oder WebP</label>
+    <input id="jab-image" type="file" accept="image/png,image/jpeg,image/webp" [disabled]="!!busy()" (change)="read($event)">
+    <p class="subtle">Bis 8 MiB und 16 Megapixel. Das originale PNG liefert die besten Ergebnisse.</p>
+    @if (decoded(); as file) {
+      <div class="restored">
+        <p class="eyebrow">Wiederhergestellt</p><h3>{{ file.name }}</h3>
+        <p>{{ file.bytes.length }} Bytes · {{ file.type || 'Unbekannter Dateityp' }}</p>
+        <p [class.success]="file.verified">{{ file.verified ? '✓ SHA-256-Prüfsumme stimmt überein.' : 'Externer JAB-Code: kein Dateikopf und keine zusätzliche SHA-256-Prüfsumme vorhanden.' }}</p>
+        @if (file.text !== null) { <label for="jab-restored">Gelesener Text</label><textarea id="jab-restored" rows="6" readonly [value]="file.text"></textarea> }
+        <a class="primary" [href]="fileUrl()" [download]="file.name">{{ file.verified ? 'Originaldatei herunterladen ↓' : 'Gelesene Daten herunterladen ↓' }}</a>
+      </div>
+    }
+  </section>
+}
+@if (busy()) { <p class="status" role="status">{{ busy() }}</p> }
+@if (error()) { <p class="error" role="alert">{{ error() }}</p> }
+<aside class="notes">
+  <h2>Kleine Dateien. Ganz ohne Upload.</h2>
+  <p>Diese erste Version überträgt bis zu 2 KiB Nutzdaten in einem einzelnen Code. Die zusätzliche Dateihülle benötigt ebenfalls Platz. Größere Dateien und Bildfolgen mit mehreren Codes sind hier noch nicht unterstützt.</p>
+  <p>Alle Eingaben und Bilder werden auf deinem Gerät verarbeitet und nicht gespeichert oder versendet. Ein JAB-Code ist keine Verschlüsselung: Wer das Bild besitzt, kann den Inhalt mit einem passenden Decoder lesen. Gewöhnliche QR-Scanner unterstützen JAB-Codes nicht unbedingt.</p>
+  <p>JAB Code von <a href="https://www.sit.fraunhofer.de/" target="_blank" rel="noopener noreferrer">Fraunhofer SIT</a>. Aus dem <a href="https://github.com/jabcode/jabcode" target="_blank" rel="noopener noreferrer">offiziellen MIT-Quellcode</a> für den Browser gebaut · <a href="/vendor/jabcode/NOTICE.md" target="_blank" rel="noopener noreferrer">Quellcode &amp; Lizenz</a>.</p>
+</aside>

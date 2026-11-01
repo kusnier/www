@@ -4,6 +4,11 @@ import { Welcome } from './welcome/welcome';
 export const routes: Routes = [
   { path: '', component: Welcome },
   {
+    path: 'jab-code',
+    title: 'Datei ↔ JAB-Code – Generator & Decoder | kusnier.net',
+    loadComponent: () => import('./tools/jab-code/jab-code').then(m => m.JabCode)
+  },
+  {
     path: 'proteinrechner',
     title: 'Proteinrechner – Dein täglicher Proteinbedarf | kusnier.net',
     loadComponent: () => import('./tools/protein/protein').then(m => m.Protein)
