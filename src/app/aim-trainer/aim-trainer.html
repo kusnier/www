@@ -1,51 +1,54 @@
-<div class="content-header">
-  <h1>🎯 Aim Trainer</h1>
+<header class="intro"><p class="eyebrow">Präzision &amp; Reaktion</p><h1>Dein nächster Treffer.</h1><p>Ein kurzer Fokus-Reset für Maus oder Touch. Triff die Ziele möglichst schnell – ohne die Präzision aus den Augen zu verlieren.</p></header>
+<section class="settings" aria-label="Trainingseinstellungen">
+  <fieldset [disabled]="locked()"><legend>Dein Training</legend>
+    <div class="setting-grid">
+      <label for="aim-mode">Modus<select id="aim-mode" [ngModel]="mode()" (ngModelChange)="configure('mode', $event)">@for (option of modes; track option.value) { <option [value]="option.value">{{ option.label }}</option> }</select></label>
+      <label for="aim-duration">Rundenlänge<select id="aim-duration" [ngModel]="duration()" (ngModelChange)="configure('duration', $event)"><option [ngValue]="15">15 Sekunden</option><option [ngValue]="30">30 Sekunden</option><option [ngValue]="60">60 Sekunden</option></select></label>
+      <label for="aim-size">Zielgröße<select id="aim-size" [ngModel]="size()" (ngModelChange)="configure('size', $event)"><option [ngValue]="64">Groß · 64 px</option><option [ngValue]="48">Mittel · 48 px</option><option [ngValue]="28">Klein · 28 px</option></select></label>
+      <label for="aim-shape">Zielform<select id="aim-shape" [ngModel]="shape()" (ngModelChange)="configure('shape', $event)"><option value="circle">Kreis</option><option value="square">Quadrat</option></select></label>
+    </div>
+    <label class="spread-label" for="aim-spread">Zielverteilung <span>{{ spread() * 100 }} % des verfügbaren Feldes</span></label>
+    <input id="aim-spread" type="range" min="0.3" max="0.9" step="0.05" [ngModel]="spread()" (ngModelChange)="configure('spread', $event)">
+  </fieldset>
+</section>
+<div class="live-stats" aria-label="Rundenstatistik">
+  <div><span>Restzeit</span><strong>{{ phase() === 'idle' ? duration() : seconds() }}<small> s</small></strong></div>
+  <div><span>Treffer</span><strong>{{ statistics().hits }}</strong></div>
+  <div><span>Fehlklicks</span><strong>{{ misses() }}</strong></div>
+  <div><span>Trefferquote</span><strong>{{ statistics().hits + misses() ? statistics().accuracy + ' %' : '–' }}</strong></div>
 </div>
-
-<mat-divider></mat-divider>
-
-<div class='trainer'>
-  <app-settings
-    [(distance)]="distance"
-    [(size)]="size"
-    [(shape)]="shape"
-    [(mode)]="mode">
-  </app-settings>
-
-  <div class='action-button'>
-    <button mat-raised-button color='warn' (click)="startGame()">Start</button>
-  </div>
-
-  <mat-divider></mat-divider>
-
-  <div class="wrapper">
-
-    <div class='status'>
-      <span>Score: {{ score() }}</span>
-      <span> - </span>
-      <span>Time: {{ timeLeft() }}s</span>
+<div class="time-track" aria-hidden="true"><span [style.width.%]="progress()"></span></div>
+<div #arena class="arena" [class.playing]="phase() === 'playing'" role="group" aria-label="Trainingsfeld" tabindex="0" (pointerdown)="miss($event)">
+  @if (phase() === 'playing') {
+    <div class="crosshair" aria-hidden="true">+</div>
+    <button type="button" class="target" [class.square]="shape() === 'square'" aria-label="Ziel treffen" [style.left.px]="position().x" [style.top.px]="position().y" [style.width.px]="size()" [style.height.px]="size()" (pointerdown)="targetPointer($event)" (click)="targetKeyboard($event)"><span aria-hidden="true"></span></button>
+    <span class="arena-hint" aria-hidden="true">Präzision vor Hektik.</span>
+  } @else if (phase() === 'countdown') {
+    <div class="overlay"><p class="eyebrow">Bereit machen</p><strong class="countdown" role="status" aria-live="polite">{{ countdown() }}</strong><p>Positioniere deine Hand. Gleich geht’s los.</p></div>
+  } @else {
+    <div class="overlay">
+      <svg class="aim-symbol" viewBox="0 0 64 64" fill="none" aria-hidden="true"><circle cx="32" cy="32" r="21"/><circle cx="32" cy="32" r="10"/><path d="M32 3v17m0 24v17M3 32h17m24 0h17"/></svg>
+      <h2>{{ phase() === 'finished' ? 'Runde geschafft.' : phase() === 'aborted' ? 'Kurz durchatmen.' : 'Fokus an. Alltag aus.' }}</h2>
+      <p>{{ phase() === 'finished' ? 'Deine Auswertung findest du unter dem Spielfeld.' : phase() === 'aborted' ? 'Starte neu, wenn du bereit bist.' : 'Triff das leuchtende Ziel. Ein Fehlklick bleibt im Feld.' }}</p>
+      <button class="primary" type="button" (click)="startGame()">{{ phase() === 'idle' ? 'Training starten' : 'Neue Runde starten' }} <span aria-hidden="true">↗</span></button>
+      <span class="subtle">3 Sekunden Countdown · {{ duration() }} Sekunden Training</span>
     </div>
-
-    <div class='play-area'>
-      @if (gameActive() && currentTarget()) {
-        <app-target
-          [ttk]="ttk()"
-          [x]="currentTarget().x"
-          [y]="currentTarget().y"
-          [shape]="shape()"
-          [size]="size()"
-          (hit)="hitTarget()">
-        </app-target>
-      }
-      @if (!gameActive()) {
-        <div class='overlay'>Game Over</div>
-      }
-    </div>
-
-    <div class='status'>
-      <span>Avg/Hit: {{ avgTimePerHit() | number:'1.2-2' }}s</span>
-      <span> - </span>
-      <span>TTK: {{ ttk() | number:'1.2-2' }}ms</span>
-    </div>
-  </div>
+  }
 </div>
+<div class="below-arena"><span>Letzter Treffer: <strong>{{ reactions().length ? lastReaction() + ' ms' : '–' }}</strong></span>@if (locked()) { <button type="button" class="stop" (click)="stop()">Runde abbrechen · Esc</button> } @else { <span>Bestwerte bleiben nur in dieser Sitzung.</span> }</div>
+@if (notice()) { <p class="notice" role="status">{{ notice() }}</p> }
+@if (phase() === 'finished' || phase() === 'aborted') {
+  <section class="results" aria-label="Rundenauswertung">
+    <p class="eyebrow">{{ phase() === 'finished' ? 'Deine Runde in Zahlen' : 'Zwischenstand · abgebrochen' }}</p>
+    <h2>{{ phase() === 'finished' && newBest() ? 'Neuer Sitzungsbestwert.' : 'Jeder Treffer zählt.' }}</h2>
+    <div class="result-grid">
+      <div><span>Ø Zeit zum Treffer</span><strong>{{ reactions().length ? statistics().average + ' ms' : '–' }}</strong></div>
+      <div><span>Median</span><strong>{{ reactions().length ? statistics().median + ' ms' : '–' }}</strong></div>
+      <div><span>Schnellster Treffer</span><strong>{{ reactions().length ? statistics().fastest + ' ms' : '–' }}</strong></div>
+      <div><span>Treffer pro Sekunde</span><strong>{{ pace() }}</strong></div>
+    </div>
+    @if (phase() === 'finished') { <p class="subtle">Bestwert: {{ best() }} Treffer · gleiche Einstellungen und Spielfeldgröße, nur abgeschlossene Runden.</p> }
+    <p class="subtle">Gemessen wird die Zeit vom Erscheinen bis zum Treffen eines Ziels, inklusive Bewegung. Das ist kein isolierter Reaktionstest. Die Trefferquote berücksichtigt auch Fehlklicks.</p>
+  </section>
+}
+<aside class="notes"><h2>Schnell werden. Präzise bleiben.</h2><p><strong>Zufällig</strong> trainiert wechselnde Zielwechsel. <strong>Horizontal</strong> und <strong>vertikal</strong> wechseln zwischen zwei festen Punkten. Kleinere Ziele und eine größere Verteilung erhöhen die Herausforderung.</p><p>Maus: linke Taste. Touch: antippen. Alternativ lässt sich das Ziel per Tab und Enter bedienen; Ergebnisse verschiedener Eingabemethoden sind nicht direkt vergleichbar. Tabwechsel oder eine Änderung der Spielfeldgröße brechen die laufende Runde ab. Es werden keine Ergebnisse gespeichert oder übertragen.</p></aside>

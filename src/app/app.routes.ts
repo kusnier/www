@@ -27,6 +27,7 @@ export const routes: Routes = [
   },
   {
     path: 'aim-trainer',
+    title: 'Aim Trainer – Präzision & Reaktion | kusnier.net',
     loadComponent: () => import('./aim-trainer/aim-trainer').then(m => m.AimTrainer)
   },
   { path: '**', redirectTo: '' },
