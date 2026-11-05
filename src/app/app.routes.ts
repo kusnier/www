@@ -30,5 +30,10 @@ export const routes: Routes = [
     title: 'Aim Trainer – Präzision & Reaktion | kusnier.net',
     loadComponent: () => import('./aim-trainer/aim-trainer').then(m => m.AimTrainer)
   },
+  {
+    path: 'wasd-trainer',
+    title: 'WASD-Trainer – Hindernissen ausweichen | kusnier.net',
+    loadComponent: () => import('./tools/wasd-trainer/wasd-trainer').then(m => m.WasdTrainer)
+  },
   { path: '**', redirectTo: '' },
 ];

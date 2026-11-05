@@ -1,0 +1,70 @@
+<header>
+  <p class="eyebrow">Tastaturtraining · Ausweichen</p>
+  <h1>WASD-Trainer</h1>
+  <p>Steuere die Figur durch die Arena. Lies die markierten Bahnen und weiche den Hindernissen aus.</p>
+</header>
+
+<div class="scoreboard">
+  <label>Schwierigkeit
+    <select [disabled]="active() || phase() === 'paused'" (change)="selectLevel($any($event.target).value)">
+      @for (key of levelKeys; track key) {
+        <option [value]="key" [selected]="key === level()">{{ levels[key].label }}</option>
+      }
+    </select>
+  </label>
+  <div><span>Überlebenszeit</span><strong>{{ elapsed().toFixed(1).replace('.', ',') }} / {{ seconds }} s</strong></div>
+  <div><span>Sitzungsbestwert</span><strong>{{ best() === null ? '–' : best()!.toFixed(1).replace('.', ',') + ' s' }}</strong></div>
+</div>
+<progress aria-label="Rundenfortschritt" [value]="elapsed()" [max]="seconds"></progress>
+
+<div class="arena-wrap">
+  <div #arena class="arena" role="group" aria-label="Spielfeld" aria-describedby="wasd-instructions"
+       tabindex="0" (keydown)="press($event)" (blur)="pause()">
+    <svg [attr.viewBox]="'0 0 ' + width + ' ' + height" aria-hidden="true">
+      @for (obstacle of obstacles(); track obstacle.index) {
+        @if (obstacle.warning) {
+          <line class="warning" [attr.x1]="obstacle.vertical ? obstacle.lane.x : 0"
+                [attr.x2]="obstacle.vertical ? obstacle.lane.x : width"
+                [attr.y1]="obstacle.vertical ? 0 : obstacle.lane.y"
+                [attr.y2]="obstacle.vertical ? height : obstacle.lane.y"/>
+          <circle class="entry" [attr.cx]="obstacle.vertical ? obstacle.lane.x : (obstacle.lane.x < 0 ? 5 : width - 5)"
+                  [attr.cy]="obstacle.vertical ? (obstacle.lane.y < 0 ? 5 : height - 5) : obstacle.lane.y" r="7"/>
+        } @else {
+          <circle class="obstacle" [attr.cx]="obstacle.x" [attr.cy]="obstacle.y" [attr.r]="hazardRadius"/>
+        }
+      }
+      <circle class="player" [attr.cx]="player().x" [attr.cy]="player().y" [attr.r]="playerRadius"/>
+      <circle class="player-center" [attr.cx]="player().x" [attr.cy]="player().y" r="4"/>
+    </svg>
+  </div>
+  @if (phase() !== 'playing') {
+    <div class="overlay">
+      @switch (phase()) {
+        @case ('idle') {
+          <p class="eyebrow">30 Sekunden pro Runde</p>
+          <h2>Bereit zum Ausweichen?</h2>
+          <button type="button" (click)="start()">Training starten</button>
+        }
+        @case ('countdown') {
+          <p class="eyebrow">Bereit machen</p>
+          <strong class="countdown" role="status">{{ countdown() }}</strong>
+        }
+        @case ('paused') {
+          <h2>Runde pausiert</h2>
+          <button type="button" (click)="resume()">Weiterspielen</button>
+          <button type="button" class="secondary" (click)="start(true)">Parcours neu starten</button>
+        }
+        @case ('finished') {
+          <h2 role="status">{{ outcome() === 'complete' ? 'Parcours geschafft!' : 'Hindernis getroffen' }}</h2>
+          <button type="button" (click)="start(true)">Parcours wiederholen</button>
+          <button type="button" class="secondary" (click)="start()">Neuer Parcours</button>
+        }
+      }
+    </div>
+  }
+</div>
+
+<p id="wasd-instructions"><kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> oder Pfeiltasten zum Steuern.
+  <kbd>Esc</kbd> pausiert. Gestrichelte Linien zeigen die nächsten Bahnen, der orange Punkt die Einflugseite.</p>
+<p class="note">Der Parcours endet nach 30 Sekunden oder bei einer Kollision. Mit „Parcours wiederholen“ erhältst du dieselbe Abfolge.
+  Der Bestwert gilt pro Schwierigkeitsstufe und bleibt bis zum Verlassen des Trainers erhalten.</p>

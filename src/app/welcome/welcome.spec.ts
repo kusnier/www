@@ -32,7 +32,8 @@ describe('Welcome', () => {
     expect(page.querySelector('.tool-card[href="/jwt-decoder"]')).not.toBeNull();
     expect(page.querySelector('.tool-card[href="/jab-code"]')).not.toBeNull();
     expect(page.querySelector('.tool-card[href="/aim-trainer"]')).not.toBeNull();
-    expect(page.querySelectorAll('.tool-card').length).toBe(5);
+    expect(page.querySelector('.tool-card[href="/wasd-trainer"]')).not.toBeNull();
+    expect(page.querySelectorAll('.tool-card').length).toBe(6);
     expect(page.querySelector('#ueber-mich')).not.toBeNull();
   });
 });

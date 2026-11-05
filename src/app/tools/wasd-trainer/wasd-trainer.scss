@@ -1,0 +1,51 @@
+:host { display: block; }
+header { margin: 24px 0 28px; }
+p { color: var(--muted); line-height: 1.65; }
+.eyebrow { color: var(--mint); font-size: .72rem; letter-spacing: .2em; text-transform: uppercase; }
+h1, h2 { color: var(--ink); font-family: Georgia, serif; font-weight: 400; margin: 0; }
+h1 { font-size: clamp(2.4rem, 6vw, 3.8rem); }
+h2 { font-size: clamp(1.25rem, 4vw, 2rem); }
+.scoreboard {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.scoreboard div, .scoreboard label { display: grid; align-content: start; gap: 5px; color: var(--muted); font-size: .78rem; }
+.scoreboard strong { color: var(--ink); font-size: 1rem; font-variant-numeric: tabular-nums; }
+select, button { font: inherit; border: 1px solid var(--line); border-radius: 5px; padding: 7px 10px; }
+select { background: var(--bg); color: var(--ink); width: 100%; max-width: 150px; }
+button { background: var(--mint); color: #102018; font-weight: 600; cursor: pointer; }
+button.secondary { color: var(--ink); background: #18272f; }
+progress { display: block; width: 100%; height: 5px; accent-color: var(--mint); }
+.arena-wrap {
+  position: relative;
+  border: 1px solid var(--line);
+  border-radius: 0 0 8px 8px;
+  background-color: #101a22;
+  background-image: linear-gradient(#a2d4b51a 1px, transparent 1px), linear-gradient(90deg, #a2d4b51a 1px, transparent 1px);
+  background-size: 5% 7.62%;
+}
+.arena svg { display: block; width: 100%; }
+.arena:focus-visible { outline: 2px solid var(--mint); outline-offset: 3px; }
+.warning { stroke: #f7ae79; stroke-width: 2; stroke-dasharray: 7 6; opacity: .65; }
+.entry, .obstacle { fill: #f7ae79; }
+.obstacle { stroke: #ffe3cc; stroke-width: 2; }
+.player { fill: var(--mint); }
+.player-center { fill: #163427; }
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 8px;
+  text-align: center;
+  padding: 8px;
+  background: #101a22e8;
+  border-radius: inherit;
+}
+.overlay p { margin: 0; }
+.countdown { color: var(--mint); font: 3rem Georgia, serif; }
+kbd { display: inline-block; border: 1px solid var(--line); border-radius: 4px; padding: 0 5px; color: var(--ink); }
+.note { font-size: .85rem; }
