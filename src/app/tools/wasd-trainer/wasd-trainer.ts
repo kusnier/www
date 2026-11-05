@@ -81,8 +81,8 @@ export class WasdTrainer implements OnDestroy {
         this.phase.set('playing');
       }
     } else {
-      if (now - this.lastTime > 250) { this.pause(); return; }
-      this.accumulated += (now - this.lastTime) / 1000;
+      // Limit catch-up after a stalled frame. Focus and visibility handle actual pauses.
+      this.accumulated += Math.min(now - this.lastTime, 100) / 1000;
       this.lastTime = now;
       const held = new Set(Array.from(this.keys, key => directions[key]));
       const direction = {
