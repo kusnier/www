@@ -155,7 +155,9 @@ export class BreathTimer implements OnDestroy {
 
   private countdownCue(phase: Phase, seconds: number): string | undefined {
     if (phase !== 'recovery') {
-      if (seconds === 15) return phase === 'breathing' ? 'Noch fünfzehn Sekunden atmen.' : 'Noch fünfzehn Sekunden.';
+      if (seconds === 15 && this.duration() > 30_000) {
+        return phase === 'breathing' ? 'Noch fünfzehn Sekunden atmen.' : 'Noch fünfzehn Sekunden.';
+      }
       if (seconds === 10) return phase === 'breathing' ? 'Noch zehn Sekunden atmen.' : 'Noch zehn Sekunden.';
       if (seconds === 5) return 'Noch fünf Sekunden.';
     }

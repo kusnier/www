@@ -87,7 +87,7 @@ function heartbeatSample(time: number) {
     const envelope = Math.sin(Math.PI * age / length) ** 2 * Math.exp(-8 * age);
     return envelope * Math.sin(2 * Math.PI * frequency * age);
   }
-  return .048 * pulse(time, 47) + .009 * pulse(time - .17, 49);
+  return .078 * pulse(time, 47) + .014 * pulse(time - .17, 49);
 }
 
 const chords = [

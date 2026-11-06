@@ -56,7 +56,7 @@
     <p class="hint">Erholungsphase: bis zu 15 Sekunden pro Runde.</p>
     <label class="check"><input type="checkbox" [checked]="gong()" (change)="gong.set($any($event.target).checked)"> Gong beim Phasenwechsel</label>
     <label class="check"><input type="checkbox" [checked]="midpoint()" (change)="midpoint.set($any($event.target).checked)"> Leiser Zwischengong zur Halbzeit</label>
-    <label class="check"><input type="checkbox" [checked]="voice()" (change)="voice.set($any($event.target).checked)"> Sprachansagen bei 15, 10 und 5 Sekunden mit Countdown</label>
+    <label class="check"><input type="checkbox" [checked]="voice()" (change)="voice.set($any($event.target).checked)"> Sprachansagen bei 10 und 5 Sekunden mit Countdown, bei längeren Phasen auch bei 15 Sekunden</label>
     <label class="check"><input type="checkbox" [checked]="heartbeat()" (change)="heartbeat.set($any($event.target).checked)"> Ruhiger Herzschlag im Hintergrund (36 BPM)</label>
     <label class="check"><input type="checkbox" [checked]="music()" (change)="music.set($any($event.target).checked)"> Meditative Hintergrundmusik</label>
     <button type="button" class="secondary sample" (click)="preview()">Gong anhören</button>

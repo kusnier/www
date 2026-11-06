@@ -69,17 +69,17 @@ describe('Breath timer', () => {
     fixture.destroy();
   }));
 
-  it('announces 15 seconds even when it is the starting duration', fakeAsync(() => {
+  it('skips the 15-second notice for phases of 30 seconds or less', fakeAsync(() => {
     const { fixture, timer, clock, say } = setup();
-    timer.edit('breathing', 15);
-    timer.edit('holding', 15);
+    timer.edit('breathing', 30);
+    timer.edit('holding', 20);
     timer.start();
-    tick(100);
-    clock.and.returnValue(15000);
-    tick(100);
+    for (const second of [15, 20, 30, 35, 40]) {
+      clock.and.returnValue(second * 1000);
+      tick(100);
+    }
     expect(say.calls.allArgs().map(([message]) => message)).toEqual([
-      'Atmen. Noch fünfzehn Sekunden atmen.',
-      'Stopp. Atem halten. Noch fünfzehn Sekunden.',
+      'Atmen.', 'Noch zehn Sekunden atmen.', 'Stopp. Atem halten.', 'Noch zehn Sekunden.',
     ]);
     fixture.destroy();
   }));
