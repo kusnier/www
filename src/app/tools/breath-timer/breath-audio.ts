@@ -82,12 +82,12 @@ export class BreathAudio {
 
 function heartbeatSample(time: number) {
   function pulse(age: number, frequency: number) {
-    if (age < 0 || age >= .24) return 0;
-    const angle = 2 * Math.PI * frequency * age;
-    const envelope = Math.sin(Math.PI * age / .24) ** 2 * Math.exp(-9 * age);
-    return envelope * (Math.sin(angle) + .35 * Math.sin(2 * angle));
+    const length = .27;
+    if (age < 0 || age >= length) return 0;
+    const envelope = Math.sin(Math.PI * age / length) ** 2 * Math.exp(-8 * age);
+    return envelope * Math.sin(2 * Math.PI * frequency * age);
   }
-  return .14 * pulse(time, 62) + .08 * pulse(time - .19, 76);
+  return .048 * pulse(time, 47) + .009 * pulse(time - .17, 49);
 }
 
 const chords = [

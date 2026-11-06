@@ -38,7 +38,7 @@ describe('Breath timer', () => {
       tick(100);
     }
     expect(say.calls.allArgs().map(([message]) => message)).toEqual([
-      'Atmen', 'Noch fünfzehn Sekunden atmen.', 'Noch zehn Sekunden atmen.', 'Noch fünf Sekunden.',
+      'Atmen.', 'Noch fünfzehn Sekunden atmen.', 'Noch zehn Sekunden atmen.', 'Noch fünf Sekunden.',
       'vier', 'drei', 'zwei', 'eins', 'Stopp. Atem halten.',
       'Noch fünfzehn Sekunden.', 'Noch zehn Sekunden.', 'Noch fünf Sekunden.',
       'vier', 'drei', 'zwei', 'eins', 'Jetzt einatmen',
@@ -66,6 +66,21 @@ describe('Breath timer', () => {
     tick(50);
     expect(timer.phase()).toBeNull();
     expect(timer.status()).toContain('Einheit beendet');
+    fixture.destroy();
+  }));
+
+  it('announces 15 seconds even when it is the starting duration', fakeAsync(() => {
+    const { fixture, timer, clock, say } = setup();
+    timer.edit('breathing', 15);
+    timer.edit('holding', 15);
+    timer.start();
+    tick(100);
+    clock.and.returnValue(15000);
+    tick(100);
+    expect(say.calls.allArgs().map(([message]) => message)).toEqual([
+      'Atmen. Noch fünfzehn Sekunden atmen.',
+      'Stopp. Atem halten. Noch fünfzehn Sekunden.',
+    ]);
     fixture.destroy();
   }));
 });

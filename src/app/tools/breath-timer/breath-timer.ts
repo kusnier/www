@@ -6,7 +6,7 @@ type Settings = { rounds: number; breathing: number; holding: number };
 
 const countdown = ['', 'eins', 'zwei', 'drei', 'vier', 'fünf'];
 const phaseAnnouncement: Record<Phase, string> = {
-  breathing: 'Atmen',
+  breathing: 'Atmen.',
   holding: 'Stopp. Atem halten.',
   recovery: 'Jetzt einatmen',
 };
@@ -122,7 +122,10 @@ export class BreathTimer implements OnDestroy {
     this.lastSecond = seconds;
     this.halfway = false;
     if (playGong && this.gong()) this.audio.gong();
-    if (this.voice()) this.audio.say(phaseAnnouncement[phase]);
+    if (this.voice()) {
+      const initialCue = phase === 'recovery' ? undefined : this.countdownCue(phase, seconds);
+      this.audio.say(initialCue ? phaseAnnouncement[phase] + ' ' + initialCue : phaseAnnouncement[phase]);
+    }
   }
 
   private tick() {
