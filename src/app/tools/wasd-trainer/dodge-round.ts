@@ -9,6 +9,8 @@ export const LEVELS = {
   easy: { label: 'Einstieg', interval: 1.5, speed: 190, warning: 0.85 },
   medium: { label: 'Normal', interval: 1, speed: 255, warning: 0.65 },
   hard: { label: 'Schnell', interval: 0.65, speed: 320, warning: 0.5 },
+  veryFast: { label: 'Sehr schnell', interval: 0.56, speed: 480, warning: 0.5 },
+  extreme: { label: 'Extrem', interval: 0.48, speed: 650, warning: 0.5 },
 };
 export type Level = keyof typeof LEVELS;
 export interface Point { x: number; y: number; }

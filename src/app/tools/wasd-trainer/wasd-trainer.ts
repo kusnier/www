@@ -17,7 +17,8 @@ export class WasdTrainer implements OnDestroy {
   readonly phase = signal<'idle' | 'countdown' | 'playing' | 'paused' | 'finished'>('idle');
   readonly level = signal<Level>('medium');
   readonly levels = LEVELS;
-  readonly levelKeys: Level[] = ['easy', 'medium', 'hard'];
+  readonly levelKeys = Object.keys(LEVELS) as Level[];
+  readonly showGuideLines = signal(true);
   readonly seconds = ROUND_SECONDS;
   readonly width = WIDTH;
   readonly height = HEIGHT;

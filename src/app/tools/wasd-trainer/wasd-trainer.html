@@ -1,7 +1,7 @@
 <header>
   <p class="eyebrow">Tastaturtraining · Ausweichen</p>
   <h1>WASD-Trainer</h1>
-  <p>Steuere die Figur durch die Arena. Lies die markierten Bahnen und weiche den Hindernissen aus.</p>
+  <p>Steuere die Figur durch die Arena und weiche den Hindernissen aus.</p>
 </header>
 
 <div class="scoreboard">
@@ -15,6 +15,11 @@
   <div><span>Überlebenszeit</span><strong>{{ elapsed().toFixed(1).replace('.', ',') }} / {{ seconds }} s</strong></div>
   <div><span>Sitzungsbestwert</span><strong>{{ best() === null ? '–' : best()!.toFixed(1).replace('.', ',') + ' s' }}</strong></div>
 </div>
+<label class="guide-setting">
+  <input type="checkbox" [checked]="showGuideLines()" [disabled]="active() || phase() === 'paused'"
+         (change)="showGuideLines.set($any($event.target).checked)">
+  Hilfslinien anzeigen
+</label>
 <progress aria-label="Rundenfortschritt" [value]="elapsed()" [max]="seconds"></progress>
 
 <div class="arena-wrap">
@@ -23,10 +28,12 @@
     <svg [attr.viewBox]="'0 0 ' + width + ' ' + height" aria-hidden="true">
       @for (obstacle of obstacles(); track obstacle.index) {
         @if (obstacle.warning) {
-          <line class="warning" [attr.x1]="obstacle.vertical ? obstacle.lane.x : 0"
-                [attr.x2]="obstacle.vertical ? obstacle.lane.x : width"
-                [attr.y1]="obstacle.vertical ? 0 : obstacle.lane.y"
-                [attr.y2]="obstacle.vertical ? height : obstacle.lane.y"/>
+          @if (showGuideLines()) {
+            <line class="warning" [attr.x1]="obstacle.vertical ? obstacle.lane.x : 0"
+                  [attr.x2]="obstacle.vertical ? obstacle.lane.x : width"
+                  [attr.y1]="obstacle.vertical ? 0 : obstacle.lane.y"
+                  [attr.y2]="obstacle.vertical ? height : obstacle.lane.y"/>
+          }
           <circle class="entry" [attr.cx]="obstacle.vertical ? obstacle.lane.x : (obstacle.lane.x < 0 ? 5 : width - 5)"
                   [attr.cy]="obstacle.vertical ? (obstacle.lane.y < 0 ? 5 : height - 5) : obstacle.lane.y" r="7"/>
         } @else {
