@@ -46,6 +46,21 @@
         <div class="jwt-output"><div class="mini-tabs"><span class="selected">Header</span><span>Payload</span><span>Signatur</span></div><pre>{{ jwtHeader }}</pre></div>
       </div>
     </a>
+    <a class="tool-card" routerLink="/json-vergleich" aria-label="JSON-Vergleich öffnen">
+      <div class="tool-card-heading">
+        <span class="tool-icon braces" aria-hidden="true">±</span>
+        <div><h3>JSON-Vergleich</h3><p>Änderungen in API-Antworten und JWT-Payloads erkennen.</p></div>
+        <span class="tool-link">Tool öffnen <span aria-hidden="true">↗</span></span>
+      </div>
+      <div class="mini-app jab-card-preview" aria-hidden="true">
+        <div class="mini-tabs"><span class="selected">Vorher</span><span>Nachher</span></div>
+        <div class="mini-body">
+          <div class="mini-input"><code style="color:#ffc0bc">− "aktiv": false</code></div>
+          <div class="mini-input"><code style="color:#a9e8bf">+ "aktiv": true</code></div>
+          <span class="mini-success">1 Unterschied · lokal im Browser</span>
+        </div>
+      </div>
+    </a>
     <a class="tool-card" routerLink="/jab-code" aria-label="JAB-Code Generator öffnen">
       <div class="tool-card-heading">
         <span class="tool-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none"><path d="M4 13V4h9M19 4h9v9M28 19v9h-9M13 28H4v-9"/><path d="M11 11h4v4h-4zm8 0h3v3h-3zm-8 8h3v3h-3zm8 0h4v4h-4z"/></svg></span>

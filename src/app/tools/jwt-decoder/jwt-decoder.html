@@ -56,6 +56,9 @@
           </button>
         </div>
         <pre [innerHTML]="highlightJson(decoded()?.payload)"></pre>
+        <a mat-stroked-button routerLink="/json-vergleich" [info]="decoded()?.payloadText">
+          Payload vergleichen
+        </a>
       </mat-card>
 
       <mat-card class="section">

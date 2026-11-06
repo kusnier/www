@@ -1,0 +1,51 @@
+<header>
+  <p class="eyebrow">Entwickler-Tool</p>
+  <h1>JSON-Vergleich</h1>
+  <p>Vergleiche zwei JSON-Dokumente und sieh, welche Felder hinzugekommen sind, fehlen oder sich geändert haben.</p>
+</header>
+<div class="editors">
+  @for (side of sides; track side) {
+    <div class="editor">
+      <div class="editor-heading">
+        <label [for]="side">{{ side === 'left' ? 'Vorher' : 'Nachher' }}</label>
+        <button type="button" class="secondary" (click)="format(side)">Formatieren</button>
+      </div>
+      <textarea [id]="side" rows="12" spellcheck="false" autocomplete="off" autocapitalize="off"
+                [value]="this[side]()" (input)="edit(side, $any($event.target).value)"
+                [attr.aria-invalid]="errors()[side] ? 'true' : null"
+                [attr.aria-describedby]="errors()[side] ? side + '-error' : null"></textarea>
+      @if (errors()[side]; as error) {
+        <p class="error" [id]="side + '-error'" role="alert">{{ error }}</p>
+      }
+    </div>
+  }
+</div>
+<div class="actions">
+  <button type="button" (click)="compare()">Vergleichen</button>
+  <button type="button" class="secondary" (click)="example()">Beispiel laden</button>
+</div>
+<p class="note">Der Vergleich läuft lokal. Deine Eingaben werden weder gesendet noch gespeichert. Die Reihenfolge von Objektschlüsseln spielt keine Rolle. Arrays werden nach Position verglichen.</p>
+
+@if (result(); as comparison) {
+  <section aria-labelledby="diff-title">
+    <h2 id="diff-title">Ergebnis</h2>
+    <p role="status">
+      @if (comparison.truncated) { Die ersten 500 Unterschiede werden angezeigt. }
+      @else if (comparison.differences.length === 0) { Die JSON-Dokumente sind inhaltlich gleich. }
+      @else { {{ comparison.differences.length }} {{ comparison.differences.length === 1 ? 'Unterschied' : 'Unterschiede' }} }
+    </p>
+    @for (diff of comparison.differences; track diff.path) {
+      <article class="difference" [class]="diff.kind">
+        <div class="difference-heading"><span>{{ labels[diff.kind] }}</span><code>{{ diff.path }}</code></div>
+        <div class="values">
+          @if (diff.before !== undefined) {
+            <div class="old"><span>− Vorher</span><pre [innerHTML]="diff.oldHtml"></pre></div>
+          }
+          @if (diff.after !== undefined) {
+            <div class="new"><span>+ Nachher</span><pre [innerHTML]="diff.newHtml"></pre></div>
+          }
+        </div>
+      </article>
+    }
+  </section>
+}

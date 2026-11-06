@@ -35,5 +35,10 @@ export const routes: Routes = [
     title: 'WASD-Trainer – Hindernissen ausweichen | kusnier.net',
     loadComponent: () => import('./tools/wasd-trainer/wasd-trainer').then(m => m.WasdTrainer)
   },
+  {
+    path: 'json-vergleich',
+    title: 'JSON-Vergleich – Unterschiede finden | kusnier.net',
+    loadComponent: () => import('./tools/json-compare/json-compare').then(m => m.JsonCompare)
+  },
   { path: '**', redirectTo: '' },
 ];

@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, signal, computed, effect } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { MatDividerModule } from "@angular/material/divider";
 import { MatCardModule } from "@angular/material/card";
 import { MatButtonModule } from "@angular/material/button";
@@ -15,6 +16,7 @@ hljs.registerLanguage('json', json);
 interface JwtDecoded {
   header?: Record<string, any>;
   payload?: Record<string, any>;
+  payloadText?: string;
   signature?: string;
   valid?: boolean;
   error?: string;
@@ -26,6 +28,7 @@ interface JwtDecoded {
   styleUrls: ['./jwt-decoder.scss'],
   imports: [
     CommonModule,
+    RouterLink,
     MatDividerModule,
     MatCardModule,
     MatButtonModule,
@@ -52,8 +55,9 @@ export class JwtDecoder {
 
     try {
       const [header, payload, signature] = token.split('.');
-      const headerObj = JSON.parse(atob(this.padBase64(header)));
-      const payloadObj = JSON.parse(atob(this.padBase64(payload)));
+      const headerObj = JSON.parse(this.decodeSegment(header));
+      const payloadText = this.decodeSegment(payload);
+      const payloadObj = JSON.parse(payloadText);
 
       const now = Math.floor(Date.now() / 1000);
       const exp = payloadObj.exp;
@@ -62,6 +66,7 @@ export class JwtDecoder {
       this.decoded.set({
         header: headerObj,
         payload: payloadObj,
+        payloadText,
         signature,
         valid
       });
@@ -92,12 +97,10 @@ export class JwtDecoder {
     setTimeout(() => this.copied.set(null), 2000);
   }
 
-  private padBase64(input: string): string {
-    const mod = input.length % 4;
-    if (mod === 2) return input + '==';
-    if (mod === 3) return input + '=';
-    if (mod === 1) return input + '===';
-    return input;
+  private decodeSegment(input: string): string {
+    const base64 = input.replace(/-/g, '+').replace(/_/g, '/');
+    const bytes = Uint8Array.from(atob(base64), char => char.charCodeAt(0));
+    return new TextDecoder('utf-8', { fatal: true }).decode(bytes);
   }
 
   expirationDate = computed(() => {
