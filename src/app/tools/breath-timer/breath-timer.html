@@ -32,6 +32,7 @@
       }
       @if (phase()) { <button type="button" class="secondary" (click)="stop()">Stopp</button> }
     </div>
+    @if (phase() === 'lastBreath') { <p class="hint">Einmal tief einatmen und locker ausatmen. Danach beginnt die Haltephase.</p> }
     @if (phase() === 'holding') { <p class="hint">Die Zeit ist eine Obergrenze. Atme ein, sobald du das Bedürfnis dazu hast.</p> }
     @if (phase() === 'recovery') { <p class="hint">Atme ein. Halte den Atem nur kurz, wenn es sich angenehm anfühlt.</p> }
     @if (status()) { <p role="status">{{ status() }}</p> }
@@ -57,6 +58,7 @@
     <label class="check"><input type="checkbox" [checked]="gong()" (change)="gong.set($any($event.target).checked)"> Gong beim Phasenwechsel</label>
     <label class="check"><input type="checkbox" [checked]="midpoint()" (change)="midpoint.set($any($event.target).checked)"> Leiser Zwischengong zur Halbzeit</label>
     <label class="check"><input type="checkbox" [checked]="voice()" (change)="voice.set($any($event.target).checked)"> Sprachansagen bei 10 und 5 Sekunden mit Countdown, bei längeren Phasen auch bei 15 Sekunden</label>
+    <label class="check"><input type="checkbox" [checked]="guidedBreaths()" (change)="guidedBreaths.set($any($event.target).checked)"> Letzten Atemzug und Erholungsatem ansagen</label>
     <label class="check"><input type="checkbox" [checked]="heartbeat()" (change)="heartbeat.set($any($event.target).checked)"> Ruhiger Herzschlag im Hintergrund (36 BPM)</label>
     <label class="check"><input type="checkbox" [checked]="music()" (change)="music.set($any($event.target).checked)"> Meditative Hintergrundmusik</label>
     <button type="button" class="secondary sample" (click)="preview()">Gong anhören</button>
