@@ -57,6 +57,8 @@
     <label class="check"><input type="checkbox" [checked]="gong()" (change)="gong.set($any($event.target).checked)"> Gong beim Phasenwechsel</label>
     <label class="check"><input type="checkbox" [checked]="midpoint()" (change)="midpoint.set($any($event.target).checked)"> Leiser Zwischengong zur Halbzeit</label>
     <label class="check"><input type="checkbox" [checked]="voice()" (change)="voice.set($any($event.target).checked)"> Ansage mit Countdown von fünf bis eins</label>
+    <label class="check"><input type="checkbox" [checked]="heartbeat()" (change)="heartbeat.set($any($event.target).checked)"> Ruhiger Herzschlag im Hintergrund</label>
+    <label class="check"><input type="checkbox" [checked]="music()" (change)="music.set($any($event.target).checked)"> Meditative Hintergrundmusik</label>
     <button type="button" class="secondary sample" (click)="preview()">Gong anhören</button>
     <p class="hint">Die Stimme braucht eine deutsche Systemstimme. Beim Verlassen des Tabs stoppt die Einheit.</p>
   </fieldset>

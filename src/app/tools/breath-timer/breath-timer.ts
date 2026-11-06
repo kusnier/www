@@ -21,6 +21,8 @@ export class BreathTimer implements OnDestroy {
   readonly gong = signal(true);
   readonly voice = signal(true);
   readonly midpoint = signal(false);
+  readonly heartbeat = signal(false);
+  readonly music = signal(false);
   readonly phase = signal<Phase | null>(null);
   readonly round = signal(1);
   readonly remaining = signal(0);
@@ -64,7 +66,8 @@ export class BreathTimer implements OnDestroy {
 
   start() {
     if (this.phase() || !this.valid()) return;
-    const audioReady = this.gong() || this.midpoint() ? this.audio.unlock() : undefined;
+    const needsAudio = this.gong() || this.midpoint() || this.heartbeat() || this.music();
+    const audioReady = needsAudio ? this.audio.unlock() : undefined;
     this.status.set('');
     this.round.set(1);
     this.enter('breathing', false);
@@ -72,7 +75,9 @@ export class BreathTimer implements OnDestroy {
     const session = ++this.session;
     void this.keepScreenAwake(session);
     void audioReady?.then(() => {
-      if (session === this.session && this.phase() === 'breathing' && this.gong()) this.audio.gong();
+      if (session !== this.session || !this.phase()) return;
+      this.audio.startBackground(this.heartbeat(), this.music());
+      if (this.phase() === 'breathing' && this.gong()) this.audio.gong();
     });
   }
 
@@ -156,6 +161,7 @@ export class BreathTimer implements OnDestroy {
   }
 
   private clearSession() {
+    this.audio.stopBackground();
     clearInterval(this.timer);
     this.timer = undefined;
     this.session++;
