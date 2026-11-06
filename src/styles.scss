@@ -57,4 +57,8 @@ mat-divider { margin: 24px 0; }
 .inner-page .invalid { color: #ffb4ab; }
 .inner-page .error-card { background: #3b2025; color: #ffb4ab; }
 .inner-page pre { overflow-wrap: anywhere; }
+app-json-compare .hljs-attr { color: #aed4ff; }
+app-json-compare .hljs-string { color: #b6e5a7; }
+app-json-compare .hljs-number { color: #ffd296; }
+app-json-compare .hljs-literal, app-json-compare .hljs-keyword { color: #e7bdff; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *,*::before,*::after { animation: none !important; transition: none !important; } }

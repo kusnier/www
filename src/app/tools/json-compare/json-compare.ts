@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/cor
 import { Router } from '@angular/router';
 import hljs from 'highlight.js/lib/core';
 import json from 'highlight.js/lib/languages/json';
-import 'highlight.js/styles/github-dark.css';
 import { compareJson, Difference, parseJson } from './json-diff';
 
 hljs.registerLanguage('json', json);
