@@ -80,7 +80,8 @@ export class BreathTimer implements OnDestroy {
     void this.keepScreenAwake(session);
     void audioReady?.then(() => {
       if (session !== this.session || !this.phase()) return;
-      this.audio.startBackground(this.heartbeat(), this.music());
+      this.audio.startBackground(this.music());
+      if (this.phase() === 'holding' && this.heartbeat()) this.audio.startHeartbeat(this.remaining());
       if (this.phase() === 'breathing' && this.gong()) this.audio.gong();
     });
   }
@@ -111,6 +112,7 @@ export class BreathTimer implements OnDestroy {
 
   private enter(phase: Phase, playGong = true, instruction?: VoiceClip) {
     this.audio.stopSpeech();
+    this.audio.stopHeartbeat();
     const seconds = phase === 'recovery' ? 15 : phase === 'lastBreath' ? 6 : this.settings()[phase];
     const duration = seconds * 1000;
     this.phase.set(phase);
@@ -119,6 +121,7 @@ export class BreathTimer implements OnDestroy {
     this.deadline = performance.now() + duration;
     this.lastSecond = seconds;
     this.halfway = false;
+    if (phase === 'holding' && this.heartbeat()) this.audio.startHeartbeat(duration);
     if (playGong && this.gong()) this.audio.gong();
     if (this.guidedBreaths()) {
       if (phase === 'lastBreath') instruction = 'letzter-atemzug';
@@ -141,6 +144,7 @@ export class BreathTimer implements OnDestroy {
       else this.endRecovery();
       return;
     }
+    if (phase === 'holding') this.audio.updateHeartbeat(left);
     const second = Math.ceil(left / 1000);
     const cue = this.countdownCue(phase, second);
     if (!this.halfway && left <= this.duration() / 2) {

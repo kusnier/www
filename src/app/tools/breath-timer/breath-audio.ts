@@ -10,26 +10,53 @@ export class BreathAudio {
   private readonly clips = new Map<VoiceClip, Promise<AudioBuffer | undefined>>();
   private speech?: AudioBufferSourceNode;
   private speechRequest = 0;
-  private background: AudioBufferSourceNode[] = [];
+  private music?: AudioBufferSourceNode;
+  private heartbeat?: { source: AudioBufferSourceNode; gain: GainNode; step: number };
 
-  startBackground(heartbeat: boolean, music: boolean) {
+  startBackground(music: boolean) {
     this.stopBackground();
     const context = this.context;
-    if (!context || context.state !== 'running') return;
-    if (heartbeat) this.loop(60 / 36, heartbeatSample);
-    if (music) this.loop(24, musicSample);
+    if (music && context?.state === 'running') {
+      this.music = this.loop(context, context.destination, 24, musicSample);
+    }
   }
 
   stopBackground() {
-    for (const source of this.background) {
-      source.stop();
-      source.disconnect();
-    }
-    this.background = [];
+    this.music?.stop();
+    this.music?.disconnect();
+    this.music = undefined;
+    this.stopHeartbeat();
   }
 
-  private loop(seconds: number, sample: (time: number) => number) {
-    const context = this.context!;
+  startHeartbeat(remaining: number) {
+    const context = this.context;
+    if (this.heartbeat || context?.state !== 'running') return;
+    const gain = context.createGain();
+    gain.gain.value = 1.5;
+    gain.connect(context.destination);
+    const source = this.loop(context, gain, 60 / 36, heartbeatSample);
+    this.heartbeat = { source, gain, step: 0 };
+    this.updateHeartbeat(remaining);
+  }
+
+  updateHeartbeat(remaining: number) {
+    const heartbeat = this.heartbeat;
+    if (!heartbeat) return;
+    // Raise the volume every three seconds during the final 15 seconds.
+    const step = Math.max(0, 5 - Math.floor(remaining / 3000));
+    if (step === heartbeat.step) return;
+    heartbeat.step = step;
+    heartbeat.gain.gain.setTargetAtTime(1.5 + .2 * step, heartbeat.gain.context.currentTime, .06);
+  }
+
+  stopHeartbeat() {
+    this.heartbeat?.source.stop();
+    this.heartbeat?.source.disconnect();
+    this.heartbeat?.gain.disconnect();
+    this.heartbeat = undefined;
+  }
+
+  private loop(context: AudioContext, destination: AudioNode, seconds: number, sample: (time: number) => number) {
     const rate = 22050;
     const buffer = context.createBuffer(1, Math.round(seconds * rate), rate);
     const data = buffer.getChannelData(0);
@@ -37,9 +64,9 @@ export class BreathAudio {
     const source = context.createBufferSource();
     source.buffer = buffer;
     source.loop = true;
-    source.connect(context.destination);
+    source.connect(destination);
     source.start();
-    this.background.push(source);
+    return source;
   }
 
   async unlock() {
