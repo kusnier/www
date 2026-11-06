@@ -1,5 +1,15 @@
+const voiceClips = [
+  '1', '2', '3', '4', '5', 'noch-10-sekunden', 'noch-15-sekunden',
+  'letzter-atemzug', 'erholungsatem', 'weiteratmen', 'einheit-beendet', 'einheit-gestoppt',
+] as const;
+
+export type VoiceClip = typeof voiceClips[number];
+
 export class BreathAudio {
   private context?: AudioContext;
+  private readonly clips = new Map<VoiceClip, Promise<AudioBuffer | undefined>>();
+  private speech?: AudioBufferSourceNode;
+  private speechRequest = 0;
   private background: AudioBufferSourceNode[] = [];
 
   startBackground(heartbeat: boolean, music: boolean) {
@@ -59,24 +69,58 @@ export class BreathAudio {
     }
   }
 
-  say(message: string, rate = 1): boolean {
-    const speech = window.speechSynthesis;
-    const voice = speech?.getVoices().find(item => item.localService && /^de\b/i.test(item.lang));
-    if (!voice) return false;
-    speech.cancel();
-    const utterance = new SpeechSynthesisUtterance(message);
-    utterance.lang = voice.lang;
-    utterance.voice = voice;
-    utterance.rate = rate;
-    speech.speak(utterance);
-    return true;
+  preloadVoice() {
+    const context = this.context;
+    if (!context) return;
+    for (const clip of voiceClips) {
+      if (!this.clips.has(clip)) {
+        const url = new URL('audio/breath-timer/' + clip + '.wav', document.baseURI);
+        this.clips.set(clip, fetch(url).then(response => {
+          if (!response.ok) throw new Error('Could not load voice clip');
+          return response.arrayBuffer();
+        }).then(bytes => context.decodeAudioData(bytes)).catch(() => {
+          this.clips.delete(clip);
+          return undefined;
+        }));
+      }
+    }
+  }
+
+  async say(clip: VoiceClip, fallback?: () => void) {
+    this.stopSpeech();
+    const request = this.speechRequest;
+    this.preloadVoice();
+    const context = this.context;
+    const buffer = await this.clips.get(clip);
+    if (request !== this.speechRequest) return;
+    if (!buffer || !context || context.state !== 'running') {
+      fallback?.();
+      return;
+    }
+
+    const source = context.createBufferSource();
+    source.buffer = buffer;
+    source.connect(context.destination);
+    source.onended = () => {
+      source.disconnect();
+      if (this.speech === source) this.speech = undefined;
+    };
+    this.speech = source;
+    source.start();
+  }
+
+  stopSpeech() {
+    this.speechRequest++;
+    this.speech?.stop();
+    this.speech = undefined;
   }
 
   stop() {
     this.stopBackground();
-    window.speechSynthesis?.cancel();
+    this.stopSpeech();
     if (this.context) void this.context.close().catch(() => {});
     this.context = undefined;
+    this.clips.clear();
   }
 }
 

@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component, computed, HostListener, OnDestroy, signal } from '@angular/core';
-import { BreathAudio } from './breath-audio';
+import { BreathAudio, type VoiceClip } from './breath-audio';
 
 type Phase = 'breathing' | 'lastBreath' | 'holding' | 'recovery';
 type Settings = { rounds: number; breathing: number; holding: number };
 
-const countdown = ['', 'eins', 'zwei', 'drei', 'vier', 'fünf'];
+const countdown = [undefined, '1', '2', '3', '4', '5'] as const;
 
 @Component({
   selector: 'app-breath-timer',
@@ -69,8 +69,9 @@ export class BreathTimer implements OnDestroy {
 
   start() {
     if (this.phase() || !this.valid()) return;
-    const needsAudio = this.gong() || this.midpoint() || this.heartbeat() || this.music();
+    const needsAudio = this.voice() || this.guidedBreaths() || this.gong() || this.midpoint() || this.heartbeat() || this.music();
     const audioReady = needsAudio ? this.audio.unlock() : undefined;
+    if (this.voice() || this.guidedBreaths()) this.audio.preloadVoice();
     this.status.set('');
     this.round.set(1);
     this.enter('breathing', false);
@@ -91,14 +92,14 @@ export class BreathTimer implements OnDestroy {
   endRecovery() {
     if (this.phase() !== 'recovery') return;
     if (this.round() >= this.settings().rounds) {
-      this.finish('Einheit beendet. Atme normal weiter.', this.guidedBreaths());
+      this.finish('Einheit beendet. Atme normal weiter.', 'einheit-beendet', this.guidedBreaths());
     } else {
       this.round.update(round => round + 1);
-      this.enter('breathing', true, this.guidedBreaths() ? 'Locker ausatmen. Weiteratmen.' : '');
+      this.enter('breathing', true, this.guidedBreaths() ? 'weiteratmen' : undefined);
     }
   }
 
-  stop() { this.finish('Einheit gestoppt. Atme normal weiter.'); }
+  stop() { this.finish('Einheit gestoppt. Atme normal weiter.', 'einheit-gestoppt'); }
 
   @HostListener('document:visibilitychange')
   visibilityChanged() {
@@ -108,7 +109,8 @@ export class BreathTimer implements OnDestroy {
   @HostListener('document:keydown.escape')
   escape() { if (this.phase()) this.stop(); }
 
-  private enter(phase: Phase, playGong = true, instruction = '') {
+  private enter(phase: Phase, playGong = true, instruction?: VoiceClip) {
+    this.audio.stopSpeech();
     const seconds = phase === 'recovery' ? 15 : phase === 'lastBreath' ? 6 : this.settings()[phase];
     const duration = seconds * 1000;
     this.phase.set(phase);
@@ -119,12 +121,12 @@ export class BreathTimer implements OnDestroy {
     this.halfway = false;
     if (playGong && this.gong()) this.audio.gong();
     if (this.guidedBreaths()) {
-      if (phase === 'lastBreath') instruction = 'Letzter tiefer Atemzug. Locker ausatmen.';
-      if (phase === 'recovery') instruction = 'Tief einatmen. Kurz halten, solange es angenehm ist.';
+      if (phase === 'lastBreath') instruction = 'letzter-atemzug';
+      if (phase === 'recovery') instruction = 'erholungsatem';
     }
     const initialCue = this.voice() ? this.countdownCue(phase, seconds) : undefined;
-    const announcement = [instruction, initialCue].filter(Boolean).join(' ');
-    if (announcement) this.audio.say(announcement);
+    const announcement = instruction ?? initialCue;
+    if (announcement) void this.audio.say(announcement);
   }
 
   private tick() {
@@ -146,20 +148,20 @@ export class BreathTimer implements OnDestroy {
       if (this.midpoint() && second > 5) this.audio.gong(true);
     }
     if (second !== this.lastSecond && cue && this.voice()) {
-      if (!this.audio.say(cue) && this.gong()) {
-        this.audio.gong(true);
-      }
+      void this.audio.say(cue, () => {
+        if (this.gong()) this.audio.gong(true);
+      });
     }
     this.lastSecond = second;
   }
 
-  private countdownCue(phase: Phase, seconds: number): string | undefined {
+  private countdownCue(phase: Phase, seconds: number): VoiceClip | undefined {
     if (phase === 'lastBreath') return undefined;
     if (phase !== 'recovery') {
       if (seconds === 15 && this.duration() > 30_000) {
-        return 'Noch fünfzehn Sekunden.';
+        return 'noch-15-sekunden';
       }
-      if (seconds === 10) return 'Noch zehn Sekunden.';
+      if (seconds === 10) return 'noch-10-sekunden';
     }
     return countdown[seconds];
   }
@@ -174,16 +176,17 @@ export class BreathTimer implements OnDestroy {
     }
   }
 
-  private finish(message: string, announce = false) {
+  private finish(message: string, clip: VoiceClip, announce = false) {
     this.clearSession();
     this.phase.set(null);
     this.status.set(message);
-    if (this.voice() || announce) this.audio.say(message);
+    if (this.voice() || announce) void this.audio.say(clip);
     if (this.gong()) this.audio.gong();
   }
 
   private clearSession() {
     this.audio.stopBackground();
+    this.audio.stopSpeech();
     clearInterval(this.timer);
     this.timer = undefined;
     this.session++;

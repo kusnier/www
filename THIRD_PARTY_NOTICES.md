@@ -19,6 +19,8 @@ The pinned lockfile also contains build/test-only dependencies. Its license meta
 - The JAB preview PNG was generated using the included JAB engine.
 - Protein reference figures are factual values attributed and linked to DGE within the calculator. The original DGE publication, illustrations and tables are not republished here.
 
+- The breath timer WAV files were synthesized with [Piper Thorsten medium](https://huggingface.co/rhasspy/piper-voices/blob/main/de/de_DE/thorsten/medium/MODEL_CARD). The model card lists the [Thorsten Voice dataset](https://github.com/thorstenMueller/Thorsten-Voice) as CC0. See [voice provenance](public/audio/breath-timer/Stimme.txt).
+
 ## Keeping notices in deployments
 
 Angular emits `dist/www/3rdpartylicenses.txt` outside its `browser/` output. `npm run build` now invokes `scripts/publish-licenses.cjs` to copy that file into both `public/licenses/npm-licenses.txt` and `dist/www/browser/licenses/npm-licenses.txt`. `npm run deploy` uses this build step. The public footer links to `/licenses/NOTICE.html`.

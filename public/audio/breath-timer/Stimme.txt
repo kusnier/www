@@ -1,0 +1,3 @@
+Synthetische Stimme: Piper, de_DE-thorsten-medium.
+Modell: https://huggingface.co/rhasspy/piper-voices/blob/main/de/de_DE/thorsten/medium/MODEL_CARD
+Stimmaufnahmen: Thorsten Voice (CC0), https://github.com/thorstenMueller/Thorsten-Voice
