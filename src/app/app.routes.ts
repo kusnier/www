@@ -37,7 +37,7 @@ export const routes: Routes = [
   },
   {
     path: 'json-vergleich',
-    title: 'JSON-Vergleich – Unterschiede finden | kusnier.net',
+    title: 'JSON & YAML vergleichen | kusnier.net',
     loadComponent: () => import('./tools/json-compare/json-compare').then(m => m.JsonCompare)
   },
   { path: '**', redirectTo: '' },

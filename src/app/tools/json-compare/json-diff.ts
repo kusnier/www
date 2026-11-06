@@ -1,4 +1,4 @@
-type Json = null | boolean | number | string | Json[] | { [key: string]: Json };
+export type Json = null | boolean | number | string | Json[] | { [key: string]: Json };
 type JsonObject = { [key: string]: Json };
 export interface Difference {
   path: string;
@@ -11,21 +11,30 @@ export const MAX_INPUT = 200_000;
 export const MAX_DIFFERENCES = 500;
 
 export function parseJson(input: string): Json {
-  if (!input.trim()) throw new Error('Bitte JSON einfügen.');
-  if (input.length > MAX_INPUT) throw new Error('Maximal 200.000 Zeichen pro Seite.');
-  const value: Json = JSON.parse(input);
-  validate(value, 0);
-  return value;
+  checkInput(input, 'JSON');
+  return validateData(JSON.parse(input));
 }
 
-function validate(value: Json, depth: number) {
-  if (depth > 100) throw new Error('Das JSON ist zu tief verschachtelt (maximal 100 Ebenen).');
-  if (typeof value === 'number' && (!Number.isFinite(value) || (Number.isInteger(value) && !Number.isSafeInteger(value)))) {
-    throw new Error('Das JSON enthält eine Zahl außerhalb des sicher darstellbaren Bereichs. IDs kannst du als Zeichenketten vergleichen.');
+export function checkInput(input: string, format: string) {
+  if (!input.trim()) throw new Error('Bitte ' + format + ' einfügen.');
+  if (input.length > MAX_INPUT) throw new Error('Maximal 200.000 Zeichen pro Seite.');
+}
+
+export function validateData(value: unknown): Json {
+  let remaining = MAX_INPUT;
+  function validate(item: unknown, depth: number) {
+    remaining -= typeof item === 'string' ? Math.max(1, item.length) : 1;
+    if (remaining < 0) throw new Error('Die Daten sind nach dem Auflösen von Referenzen zu groß.');
+    if (depth > 100) throw new Error('Die Daten sind zu tief verschachtelt (maximal 100 Ebenen).');
+    if (typeof item === 'number' && (!Number.isFinite(item) || (Number.isInteger(item) && !Number.isSafeInteger(item)))) {
+      throw new Error('Eine Zahl liegt außerhalb des sicher darstellbaren Bereichs. IDs kannst du als Zeichenketten vergleichen.');
+    }
+    if (item !== null && typeof item === 'object') {
+      for (const child of Object.values(item)) validate(child, depth + 1);
+    }
   }
-  if (value !== null && typeof value === 'object') {
-    for (const child of Object.values(value)) validate(child, depth + 1);
-  }
+  validate(value, 0);
+  return value as Json;
 }
 
 function isObject(value: Json): value is JsonObject {

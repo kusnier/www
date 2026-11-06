@@ -1,14 +1,21 @@
 <header>
   <p class="eyebrow">Entwickler-Tool</p>
-  <h1>JSON-Vergleich</h1>
-  <p>Vergleiche zwei JSON-Dokumente und sieh, welche Felder hinzugekommen sind, fehlen oder sich geändert haben.</p>
+  <h1>JSON &amp; YAML vergleichen</h1>
+  <p>Vergleiche zwei Dokumente und sieh, welche Felder hinzugekommen sind, fehlen oder sich geändert haben.</p>
 </header>
 <div class="editors">
   @for (side of sides; track side) {
     <div class="editor">
       <div class="editor-heading">
         <label [for]="side">{{ side === 'left' ? 'Vorher' : 'Nachher' }}</label>
-        <button type="button" class="secondary" (click)="format(side)">Formatieren</button>
+        <div class="editor-actions">
+          <select [attr.aria-label]="side === 'left' ? 'Format für Vorher' : 'Format für Nachher'"
+                  [value]="formats()[side]" (change)="setFormat(side, $any($event.target).value)">
+            <option value="json">JSON</option>
+            <option value="yaml">YAML</option>
+          </select>
+          <button type="button" class="secondary" (click)="format(side)">Formatieren</button>
+        </div>
       </div>
       <textarea [id]="side" rows="12" spellcheck="false" autocomplete="off" autocapitalize="off"
                 [value]="this[side]()" (input)="edit(side, $any($event.target).value)"
@@ -24,14 +31,14 @@
   <button type="button" (click)="compare()">Vergleichen</button>
   <button type="button" class="secondary" (click)="example()">Beispiel laden</button>
 </div>
-<p class="note">Der Vergleich läuft lokal. Deine Eingaben werden weder gesendet noch gespeichert. Die Reihenfolge von Objektschlüsseln spielt keine Rolle. Arrays werden nach Position verglichen.</p>
+<p class="note">Der Vergleich läuft lokal im Browser. Kommentare, Formatierung und die Reihenfolge von Objektschlüsseln werden beim Vergleich ignoriert. Listen werden nach Position verglichen.</p>
 
 @if (result(); as comparison) {
   <section aria-labelledby="diff-title">
     <h2 id="diff-title">Ergebnis</h2>
     <p role="status">
       @if (comparison.truncated) { Die ersten 500 Unterschiede werden angezeigt. }
-      @else if (comparison.differences.length === 0) { Die JSON-Dokumente sind inhaltlich gleich. }
+      @else if (comparison.differences.length === 0) { Die Dokumente sind inhaltlich gleich. }
       @else { {{ comparison.differences.length }} {{ comparison.differences.length === 1 ? 'Unterschied' : 'Unterschiede' }} }
     </p>
     @for (diff of comparison.differences; track diff.path) {

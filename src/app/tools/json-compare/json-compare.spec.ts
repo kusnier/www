@@ -5,8 +5,21 @@ import { By } from '@angular/platform-browser';
 import { JwtDecoder } from '../jwt-decoder/jwt-decoder';
 import { JsonCompare } from './json-compare';
 import { compareJson, parseJson } from './json-diff';
+import { readYaml } from './yaml-input';
 
 describe('JSON comparison', () => {
+  it('compares YAML and JSON by their values and keeps comments when formatting', () => {
+    const yaml = readYaml('# production\nreplicas: 2\nlabels: [blue, green]\n');
+    expect(compareJson(yaml.value, parseJson('{"labels":["blue","green"],"replicas":2}')).differences.length).toBe(0);
+    expect(yaml.format()).toContain('# production');
+  });
+
+  it('rejects multiple YAML documents, duplicate keys and cyclic references', () => {
+    expect(() => readYaml('replicas: 2\n---\nreplicas: 3')).toThrowError(/genau ein/);
+    expect(() => readYaml('replicas: 2\nreplicas: 3')).toThrowError(/Zeile/);
+    expect(() => readYaml('root: &root [*root]')).toThrow();
+  });
+
   it('ignores object order and reports positional array changes with unambiguous paths', () => {
     const before = parseJson('{"roles":["reader"],"legacy":null,"x.y":1,"same":{"b":2,"a":1}}');
     const after = parseJson('{"x.y":"1","roles":["editor","reader"],"same":{"a":1,"b":2}}');

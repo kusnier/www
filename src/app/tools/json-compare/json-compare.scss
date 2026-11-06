@@ -5,12 +5,13 @@ h1 { font-size: clamp(2.4rem, 6vw, 3.8rem); }
 p { color: var(--muted); line-height: 1.65; }
 .eyebrow { color: var(--mint); font-size: .72rem; letter-spacing: .2em; text-transform: uppercase; }
 .editors, .values { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
-.editor-heading, .difference-heading, .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.editor-heading, .editor-actions, .difference-heading, .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
 .editor-heading { justify-content: space-between; margin-bottom: 8px; }
-textarea, button { border: 1px solid var(--line); border-radius: 6px; }
+textarea, button, select { border: 1px solid var(--line); border-radius: 6px; }
 textarea { display: block; width: 100%; min-height: 150px; resize: vertical; padding: 12px; font: .85rem/1.55 monospace; background: #0c151b; color: var(--ink); }
 button { font: inherit; padding: 7px 12px; background: var(--mint); color: #102018; cursor: pointer; }
-button.secondary { background: #18272f; color: var(--ink); }
+button.secondary, select { background: #18272f; color: var(--ink); }
+select { font: inherit; padding: 7px 10px; }
 .actions { margin-top: 16px; }
 .note, .error { font-size: .85rem; }
 .error { color: #ffc0bc; }

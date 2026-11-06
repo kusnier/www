@@ -4,7 +4,7 @@ This public repository has no overarching license for the owner's original code 
 
 ## Software shipped to browsers
 
-- Angular, Material, CDK, zone.js: MIT; highlight.js: BSD-3-Clause; RxJS: Apache-2.0; tslib: 0BSD. Full build-extracted notices: [`public/licenses/npm-licenses.txt`](public/licenses/npm-licenses.txt).
+- Angular, Material, CDK, zone.js: MIT; highlight.js: BSD-3-Clause; RxJS: Apache-2.0; tslib: 0BSD; yaml: ISC. Full build-extracted notices: [`public/licenses/npm-licenses.txt`](public/licenses/npm-licenses.txt).
 - Fraunhofer SIT JAB Code: MIT, pinned source revision `3b56eef72436c88fc8538dc4d63920e058537874`. The complete notice, license and copied core sources are in [`public/vendor/jabcode`](public/vendor/jabcode). The official demo's old LGPL binaries are not used or redistributed.
 - Emscripten-generated runtime and compiled standard-library components: notices for Emscripten 6.0.13, musl libc and LLVM compiler-rt are included in [`public/licenses`](public/licenses). Compiler-rt's notice was fetched from the upstream main branch; it records Apache-2.0 with the LLVM exception and additional component notices, not a claim to an exact compiler source revision.
 
