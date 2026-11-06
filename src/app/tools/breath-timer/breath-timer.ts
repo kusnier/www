@@ -4,6 +4,13 @@ import { BreathAudio } from './breath-audio';
 type Phase = 'breathing' | 'holding' | 'recovery';
 type Settings = { rounds: number; breathing: number; holding: number };
 
+const countdown = ['', 'eins', 'zwei', 'drei', 'vier', 'fünf'];
+const phaseAnnouncement: Record<Phase, string> = {
+  breathing: 'Atmen',
+  holding: 'Stopp. Atem halten.',
+  recovery: 'Jetzt einatmen',
+};
+
 @Component({
   selector: 'app-breath-timer',
   templateUrl: './breath-timer.html',
@@ -112,10 +119,10 @@ export class BreathTimer implements OnDestroy {
     this.duration.set(duration);
     this.remaining.set(duration);
     this.deadline = performance.now() + duration;
-    this.lastSecond = seconds + 1;
+    this.lastSecond = seconds;
     this.halfway = false;
     if (playGong && this.gong()) this.audio.gong();
-    if (this.voice()) this.audio.say(phase === 'recovery' ? 'Jetzt einatmen' : this.labels[phase]);
+    if (this.voice()) this.audio.say(phaseAnnouncement[phase]);
   }
 
   private tick() {
@@ -130,16 +137,26 @@ export class BreathTimer implements OnDestroy {
       return;
     }
     const second = Math.ceil(left / 1000);
+    const cue = this.countdownCue(phase, second);
     if (!this.halfway && left <= this.duration() / 2) {
       this.halfway = true;
       if (this.midpoint() && second > 5) this.audio.gong(true);
     }
-    if (second !== this.lastSecond && second <= 5) {
-      if (this.voice() && !this.audio.say(['', 'eins', 'zwei', 'drei', 'vier', 'fünf'][second]) && this.gong()) {
+    if (second !== this.lastSecond && cue && this.voice()) {
+      if (!this.audio.say(cue, second === 5 && phase !== 'recovery' ? 1.3 : 1) && this.gong()) {
         this.audio.gong(true);
       }
     }
     this.lastSecond = second;
+  }
+
+  private countdownCue(phase: Phase, seconds: number): string | undefined {
+    if (phase !== 'recovery') {
+      if (seconds === 15) return phase === 'breathing' ? 'Noch fünfzehn Sekunden atmen.' : 'Noch fünfzehn Sekunden.';
+      if (seconds === 10) return phase === 'breathing' ? 'Noch zehn Sekunden atmen.' : 'Noch zehn Sekunden.';
+      if (seconds === 5) return 'Noch fünf Sekunden.';
+    }
+    return countdown[seconds];
   }
 
   private async keepScreenAwake(session: number) {

@@ -30,16 +30,21 @@ describe('Breath timer', () => {
     fixture.destroy();
   }));
 
-  it('announces each of the last five seconds once and stops without another phase', fakeAsync(() => {
+  it('announces both countdowns and their phase transitions once', fakeAsync(() => {
     const { fixture, timer, clock, say } = setup();
     timer.start();
-    for (let second = 40; second <= 44; second++) {
+    for (const second of [30, 35, 40, 41, 42, 43, 44, 45, 150, 155, 160, 161, 162, 163, 164, 165]) {
       clock.and.returnValue(second * 1000);
       tick(100);
     }
-    expect(say.calls.allArgs().flat()).toEqual(['Atmen', 'fünf', 'vier', 'drei', 'zwei', 'eins']);
+    expect(say.calls.allArgs().map(([message]) => message)).toEqual([
+      'Atmen', 'Noch fünfzehn Sekunden atmen.', 'Noch zehn Sekunden atmen.', 'Noch fünf Sekunden.',
+      'vier', 'drei', 'zwei', 'eins', 'Stopp. Atem halten.',
+      'Noch fünfzehn Sekunden.', 'Noch zehn Sekunden.', 'Noch fünf Sekunden.',
+      'vier', 'drei', 'zwei', 'eins', 'Jetzt einatmen',
+    ]);
     timer.stop();
-    clock.and.returnValue(60000);
+    clock.and.returnValue(200000);
     tick(1000);
     expect(timer.phase()).toBeNull();
     expect(timer.round()).toBe(1);

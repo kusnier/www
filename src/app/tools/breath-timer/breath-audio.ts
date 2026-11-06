@@ -59,7 +59,7 @@ export class BreathAudio {
     }
   }
 
-  say(message: string): boolean {
+  say(message: string, rate = 1): boolean {
     const speech = window.speechSynthesis;
     const voice = speech?.getVoices().find(item => item.localService && /^de\b/i.test(item.lang));
     if (!voice) return false;
@@ -67,6 +67,7 @@ export class BreathAudio {
     const utterance = new SpeechSynthesisUtterance(message);
     utterance.lang = voice.lang;
     utterance.voice = voice;
+    utterance.rate = rate;
     speech.speak(utterance);
     return true;
   }
