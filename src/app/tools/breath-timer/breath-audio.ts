@@ -6,7 +6,7 @@ export class BreathAudio {
     this.stopBackground();
     const context = this.context;
     if (!context || context.state !== 'running') return;
-    if (heartbeat) this.loop(1.25, heartbeatSample);
+    if (heartbeat) this.loop(60 / 36, heartbeatSample);
     if (music) this.loop(24, musicSample);
   }
 
