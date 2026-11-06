@@ -1,0 +1,73 @@
+<header>
+  <p class="eyebrow">Atmen · Halten · Erholen</p>
+  <h1>Wim-Hof-Atemtimer</h1>
+  <p>Dein Rhythmus für die Atemübung. Mit einem weichen Gong und Ansage vor dem Phasenwechsel.</p>
+</header>
+
+<aside class="safety" aria-label="Sicherheit">
+  <strong>Übe im Sitzen oder Liegen an einem sicheren Ort.</strong>
+  <p>Nie im oder am Wasser, unter der Dusche oder beim Fahren. Bei Atemdrang sofort wieder einatmen, auch wenn der Timer noch läuft. Bei Unwohlsein die Einheit abbrechen und normal weiteratmen.</p>
+</aside>
+
+<div class="layout">
+  <section class="clock-card" aria-labelledby="phase-title">
+    <div class="dial" [style.--progress]="(phase() ? progress() : 0) * 100 + '%'" [class.holding]="phase() === 'holding'">
+      <div class="dial-face">
+        <span class="eyebrow">{{ phase() ? 'Runde ' + round() + ' / ' + settings().rounds : 'Deine Einheit' }}</span>
+        <h2 id="phase-title" aria-live="polite">{{ phase() ? labels[phase()!] : 'Bereit' }}</h2>
+        <strong class="time">{{ phase() ? time() : '–:––' }}</strong>
+      </div>
+    </div>
+    <div class="controls">
+      @switch (phase()) {
+        @case ('holding') {
+          <button type="button" (click)="endHold()">Jetzt einatmen</button>
+        }
+        @case ('recovery') {
+          <button type="button" (click)="endRecovery()">Erholungsphase beenden</button>
+        }
+        @case (null) {
+          <button type="button" (click)="start()" [disabled]="!valid()">Einheit starten</button>
+        }
+      }
+      @if (phase()) { <button type="button" class="secondary" (click)="stop()">Stopp</button> }
+    </div>
+    @if (phase() === 'holding') { <p class="hint">Die Zeit ist eine Obergrenze. Atme ein, sobald du das Bedürfnis dazu hast.</p> }
+    @if (phase() === 'recovery') { <p class="hint">Atme ein. Halte den Atem nur kurz, wenn es sich angenehm anfühlt.</p> }
+    @if (status()) { <p role="status">{{ status() }}</p> }
+  </section>
+
+  <fieldset [disabled]="!!phase()">
+    <legend>Einstellungen</legend>
+    <label class="field">Profil
+      <select [value]="profile()" (change)="selectProfile($any($event.target).value)">
+        @for (item of profiles; track item.name; let index = $index) {
+          <option [value]="index">{{ item.name }}</option>
+        }
+        <option value="custom" disabled>Benutzerdefiniert</option>
+      </select>
+    </label>
+    <div class="fields">
+      <label class="field">Runden<input type="number" min="1" max="10" step="1" [value]="settings().rounds" (input)="edit('rounds', $any($event.target).valueAsNumber)"></label>
+      <label class="field">Atmen (s)<input type="number" min="10" max="180" step="1" [value]="settings().breathing" (input)="edit('breathing', $any($event.target).valueAsNumber)"></label>
+      <label class="field">Max. Halten (s)<input type="number" min="10" max="120" step="1" [value]="settings().holding" (input)="edit('holding', $any($event.target).valueAsNumber)"></label>
+    </div>
+    @if (!valid()) { <p role="alert">Bitte ganze Zahlen eingeben: 1–10 Runden, 10–180 Sekunden Atmen, 10–120 Sekunden Halten.</p> }
+    <p class="hint">Erholungsphase: bis zu 15 Sekunden pro Runde.</p>
+    <label class="check"><input type="checkbox" [checked]="gong()" (change)="gong.set($any($event.target).checked)"> Gong beim Phasenwechsel</label>
+    <label class="check"><input type="checkbox" [checked]="midpoint()" (change)="midpoint.set($any($event.target).checked)"> Leiser Zwischengong zur Halbzeit</label>
+    <label class="check"><input type="checkbox" [checked]="voice()" (change)="voice.set($any($event.target).checked)"> Ansage mit Countdown von fünf bis eins</label>
+    <button type="button" class="secondary sample" (click)="preview()">Gong anhören</button>
+    <p class="hint">Die Stimme braucht eine deutsche Systemstimme. Beim Verlassen des Tabs stoppt die Einheit.</p>
+  </fieldset>
+</div>
+
+<section class="instructions" aria-labelledby="how-title">
+  <h2 id="how-title">So läuft eine Runde ab</h2>
+  <ol>
+    <li><strong>Atmen.</strong> Die Methode beschreibt etwa 30 tiefe Atemzüge. Lass die Luft jeweils locker ausströmen und erzwinge kein Tempo, um eine Zahl zu erreichen.</li>
+    <li><strong>Halten.</strong> Nach dem letzten lockeren Ausatmen folgt die Haltephase. Sobald du wieder Luft brauchst, atme ein und beende die Haltephase sofort.</li>
+    <li><strong>Erholen.</strong> Atme einmal tief ein. Die Methode sieht vor, diesen Atemzug kurz zu halten und dann wieder auszuatmen. Beende die Phase früher, wenn du möchtest.</li>
+  </ol>
+  <p><a href="https://www.wimhofmethod.com/breathing-exercises" target="_blank" rel="noopener noreferrer">Offizielle Anleitung zur Atemtechnik</a></p>
+</section>

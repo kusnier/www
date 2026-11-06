@@ -40,5 +40,10 @@ export const routes: Routes = [
     title: 'JSON & YAML vergleichen | kusnier.net',
     loadComponent: () => import('./tools/json-compare/json-compare').then(m => m.JsonCompare)
   },
+  {
+    path: 'atemtimer',
+    title: 'Wim-Hof-Atemtimer mit Gong | kusnier.net',
+    loadComponent: () => import('./tools/breath-timer/breath-timer').then(m => m.BreathTimer)
+  },
   { path: '**', redirectTo: '' },
 ];

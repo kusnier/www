@@ -35,7 +35,8 @@ describe('Welcome', () => {
     expect(page.querySelector('.tool-card[href="/wasd-trainer"]')).not.toBeNull();
     expect(page.querySelector('.tool-card[href="/json-vergleich"]')).not.toBeNull();
     expect(page.querySelector('.tool-card[href="https://matrixcode.de/"]')).not.toBeNull();
-    expect(page.querySelectorAll('.tool-card').length).toBe(8);
+    expect(page.querySelector('.tool-card[href="/atemtimer"]')).not.toBeNull();
+    expect(page.querySelectorAll('.tool-card').length).toBe(9);
     expect(page.querySelector('#ueber-mich')).not.toBeNull();
   });
 });
